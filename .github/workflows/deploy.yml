@@ -185,7 +185,7 @@ jobs:
       - name: Deploy React application to S3
         env:
           s3bucket: ${{ steps.terraform-ouputs.outputs.s3bucket }}
-          distribution: ${{ steps.terraform-ouputs.outputs.distribution }}
+          distribution: ${{ steps.terraform-ouputs.outputs.cloudfront_distribution_id }}
         run: |
           aws s3 sync dist/ s3://${s3bucket}
           aws cloudfront create-invalidation --distribution-id ${distribution} --paths "/*"
