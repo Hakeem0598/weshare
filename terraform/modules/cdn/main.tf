@@ -18,7 +18,7 @@ locals {
 }
 
 resource "aws_cloudfront_distribution" "dist" {
-  enabled             = false
+  enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
   aliases             = local.aliases
