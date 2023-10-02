@@ -37,7 +37,7 @@ resource "aws_apigatewayv2_stage" "primary_stage" {
 }
 
 locals {
-  domain_name = var.environment == "production" ? "api.${var.domain_name}" : "api.${var.environment}.${var.domain_name}"
+  domain_name = var.environment == "production" ? "api.${var.domain_name}" : "api-${var.environment}.${var.domain_name}"
 }
 
 resource "aws_apigatewayv2_domain_name" "api" {
