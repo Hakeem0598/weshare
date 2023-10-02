@@ -1,0 +1,154 @@
+name: Deploy application
+description: Deploys application to a provided environment
+inputs:
+  environment:
+    description: The name of environment
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Git checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+        role-session-name: ${{ secrets.AWS_OIDC_ROLE_SESSION_NAME }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Log into Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v1
+      id: login-ecr
+
+    - name: Create Amazon ECR repository
+      uses: int128/create-ecr-repository-action@v1
+      with:
+        repository: ${{ secrets.AWS_WEB_REPO_NAME }}
+
+    - name: Build, tag and push lambda image to Amazon ECR
+      env:
+        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        REPOSITORY: ${{ secrets.AWS_WEB_REPO_NAME }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG ./packages/backend
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+      shell: bash
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.4
+        terraform_wrapper: false
+
+    - name: Format Terraform files
+      id: fmt
+      working-directory: ./terraform/${{ inputs.environment }}
+      run: terraform fmt -check
+      shell: bash
+      continue-on-error: true
+
+
+    - name: Initialize Terraform
+      id: init
+      working-directory: ./terraform/${{ inputs.environment }}
+      env:
+        AWS_BUCKET_NAME: ${{ secrets.AWS_TFSTATE_BUCKET_NAME }}
+        AWS_BUCKET_KEY_NAME: "${{ inputs.environment }}/${{ secrets.AWS_TFSTATE_BUCKET_KEY_NAME}}"
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+      run: >
+        terraform init -backend-config="bucket=${AWS_BUCKET_NAME}"
+        -backend-config="key=${AWS_BUCKET_KEY_NAME}"
+        -backend-config="region=${AWS_REGION}"
+      shell: bash
+
+    - name: Validate Terraform files
+      id: validate
+      working-directory: ./terraform/${{ inputs.environment }}
+      run: terraform validate
+      shell: bash
+
+    - name: Terraform plan
+      id: plan
+      working-directory: ./terraform/${{ inputs.environment }}
+      run: terraform plan -no-color
+      shell: bash
+      if: github.event_name == 'pull_request'
+
+    - name: Terraform Run
+      id: run
+      uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+          <details><summary>Validation Output</summary>
+          \`\`\`\n
+          ${{ steps.validate.outputs.stdout }}
+          \`\`\`
+
+          </details>
+
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+          <details><summary>Show Plan</summary>
+
+          \`\`\`\n
+          ${process.env.PLAN}
+          \`\`\`
+
+          </details>
+
+          *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
+
+    - name: Terraform plan status
+      if: steps.plan.outcome == 'failure'
+      run: exit
+      shell: bash
+
+    - name: Terraform apply
+      working-directory: ./terraform/${{ inputs.environment }}
+      env:
+        TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+        TF_VAR_domain_name: ${{ secrets.DOMAIN_NAME }}
+        TF_VAR_web_bucket: ${{ secrets.AWS_WEB_BUCKET_NAME }}
+      run: terraform apply -auto-approve
+      shell: bash
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: web
+        path: ./dist
+
+    - name: Terraform outputs
+      working-directory: ./terraform/${{ inputs.environment }}
+      id: terraform-ouputs
+      run: |
+        s3bucket=$(terraform output -raw web_bucket)
+        distribution=${terraform output -raw cloudfront_distribution_id}
+        echo "s3bucket=${s3bucket}" >> ${GITHUB_OUTPUT}
+        echo "distribution=${distribution} >> ${GITHUB_OUTPUT}"
+      shell: bash
+
+    - name: Deploy React application to S3
+      env:
+        s3bucket: ${{ steps.terraform-ouputs.outputs.s3bucket }}
+        distribution: ${{ steps.terraform-ouputs.outputs.distribution }}
+      run: |
+        aws s3 sync dist/ s3://${s3bucket}
+        aws cloudfront create-invalidation --distribution-id ${distribution} --paths "/*"
+      shell: bash

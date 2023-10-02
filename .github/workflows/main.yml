@@ -1,0 +1,94 @@
+name: "Test, build and deploy app"
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  linting:
+    name: Lint
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Continuous integration
+        uses: ./.github/actions/ci-setup
+
+      - name: Lint Applications
+        run: npm run lint
+
+  type-check:
+    name: Types
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Continuous Integration
+        uses: ./.github/actions/ci-setup
+
+      - name: Check Application Types
+        run: npm run type-check
+
+  deploy-ssl-cert:
+    name: Deploy SSL certificate
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          role-session-name: ${{ secrets.AWS_OIDC_ROLE_SESSION_NAME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.4
+          terraform_wrapper: false
+
+      - name: Initialize Terraform
+        id: init
+        working-directory: ./terraform/global
+        env:
+          AWS_BUCKET_NAME: ${{ secrets.AWS_TFSTATE_BUCKET_NAME }}
+          AWS_BUCKET_KEY_NAME: "global/${{ env.AWS_TFSTATE_BUCKET_KEY_NAME }}"
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: >
+          terraform init -backend-config="bucket=${AWS_BUCKET_NAME}"
+          -backend-config="key=${AWS_BUCKET_KEY_NAME}"
+          -backend-config="region=${AWS_REGION}"
+
+      - name: Validate Terraform files
+        id: validate
+        working-directory: ./terraform/global
+        run: terraform validate
+
+      - name: Terraform apply
+        working-directory: ./terraform/global
+        env:
+          TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+          TF_VAR_domain_name: ${{ secrets.DOMAIN_NAME }}
+        run: terraform apply -auto-approve
+
+  deploy-staging:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      target-env: staging
+    secrets: inherit
+
+  deploy-production:
+    needs: deploy-staging
+    uses: ./.github/workflows/deploy.yml
+    with:
+      target-env: production
+    secrets: inherit

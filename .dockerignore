@@ -1,0 +1,27 @@
+**/node_modules/
+**/.git
+**/README.md
+**/LICENSE
+**/.vscode
+**/npm-debug.log
+**/coverage
+**/.env
+**/.editorconfig
+**/.aws
+**/dist
+
+.gitignore
+.editorconfig
+
+# Compiled files
+**/.terraform/
+**/.terragrunt-cache/
+*.tfstate
+*.tfstate.*
+
+# Module directory
+**/.idea
+**/*.iml
+
+**/.build-harness
+**/build-harness
