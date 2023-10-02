@@ -5,7 +5,7 @@ data "aws_route53_zone" "primary" {
 
 locals {
   web_subdomain = var.environment == "production" ? var.domain_name : "${var.environment}.${var.domain_name}"
-  api_subdomain = var.environment == "production" ? "api.${var.domain_name}" : "api.${var.environment}.${var.domain_name}"
+  api_subdomain = var.environment == "production" ? "api.${var.domain_name}" : "api-${var.environment}.${var.domain_name}"
 }
 
 resource "aws_route53_record" "web_subdomain" {

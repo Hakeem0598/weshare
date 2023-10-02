@@ -1,6 +1,10 @@
-data "aws_acm_certificate" "cert" {
-  provider = aws.us
+data "aws_acm_certificate" "eu_cert" {
   domain = var.domain_name
+}
+
+data "aws_acm_certificate" "us_cert" {
+  provider = aws.us
+  domain   = var.domain_name
 }
 
 module "api" {
@@ -12,7 +16,7 @@ module "api" {
   environment            = local.environment
   app_name               = var.app_name
   domain_name            = var.domain_name
-  acm_certificate_arn    = data.aws_acm_certificate.cert.arn
+  acm_certificate_arn    = data.aws_acm_certificate.eu_cert.arn
 }
 
 module "backend" {
@@ -28,7 +32,7 @@ module "backend" {
 
 module "cdn" {
   source                          = "../modules/cdn"
-  acm_certificate_arn             = data.aws_acm_certificate.cert.arn
+  acm_certificate_arn             = data.aws_acm_certificate.us_cert.arn
   domain_name                     = var.domain_name
   logs_bucket_domain_name         = module.storage.logs_bucket_domain_name
   web_bucket_regional_domain_name = module.storage.web_bucket_regional_domain_name
