@@ -177,7 +177,7 @@ jobs:
         id: terraform-ouputs
         run: |
           s3bucket=$(terraform output -raw web_bucket)
-          distribution=${terraform output -raw cloudfront_distribution_id}
+          distribution=$(terraform output -raw cloudfront_distribution_id)
           echo "s3bucket=${s3bucket}" >> ${GITHUB_OUTPUT}
           echo "distribution=${distribution} >> ${GITHUB_OUTPUT}"
         shell: bash
