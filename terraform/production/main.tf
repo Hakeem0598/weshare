@@ -1,4 +1,5 @@
 data "aws_acm_certificate" "cert" {
+  provider = aws.us
   domain = var.domain_name
 }
 

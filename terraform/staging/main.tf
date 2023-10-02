@@ -1,4 +1,5 @@
 data "aws_acm_certificate" "cert" {
+  provider = aws.us
   domain = var.domain_name
 }
 
@@ -26,8 +27,8 @@ module "backend" {
 }
 
 module "cdn" {
-  source = "../modules/cdn"
-  acm_certificate_arn    = data.aws_acm_certificate.cert.arn
+  source                          = "../modules/cdn"
+  acm_certificate_arn             = data.aws_acm_certificate.cert.arn
   domain_name                     = var.domain_name
   logs_bucket_domain_name         = module.storage.logs_bucket_domain_name
   web_bucket_regional_domain_name = module.storage.web_bucket_regional_domain_name
@@ -40,10 +41,10 @@ module "dns" {
   cloudfront_distribution_domain_name    = module.cdn.cloudfront_distribution_domain_name
   cloudfront_distribution_hosted_zone_id = module.cdn.cloudfront_distribution_hosted_zone_id
   domain_name                            = var.domain_name
-  environment = local.environment
-  app_name    = var.app_name
-  apigateway_domain_name = module.api.apigateway_domain_name
-  apigateway_hosted_zone_id = module.api.apigateway_hosted_zone_id
+  environment                            = local.environment
+  app_name                               = var.app_name
+  apigateway_domain_name                 = module.api.apigateway_domain_name
+  apigateway_hosted_zone_id              = module.api.apigateway_hosted_zone_id
 }
 
 # module "ssl_certificate" {
