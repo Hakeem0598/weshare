@@ -179,13 +179,13 @@ jobs:
           s3bucket=$(terraform output -raw web_bucket)
           distribution=$(terraform output -raw cloudfront_distribution_id)
           echo "s3bucket=${s3bucket}" >> ${GITHUB_OUTPUT}
-          echo "distribution=${distribution} >> ${GITHUB_OUTPUT}"
+          echo "distribution=${distribution}" >> ${GITHUB_OUTPUT}
         shell: bash
 
       - name: Deploy React application to S3
         env:
           s3bucket: ${{ steps.terraform-ouputs.outputs.s3bucket }}
-          distribution: ${{ steps.terraform-ouputs.outputs.cloudfront_distribution_id }}
+          distribution: ${{ steps.terraform-ouputs.outputs.distribution }}
         run: |
           aws s3 sync dist/ s3://${s3bucket}
           aws cloudfront create-invalidation --distribution-id ${distribution} --paths "/*"
