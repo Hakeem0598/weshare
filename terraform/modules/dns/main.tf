@@ -38,6 +38,6 @@ resource "aws_route53_record" "a_name_record" {
   name = "www"
   type = "CNAME"
   zone_id = data.aws_route53_zone.primary.zone_id
-  
+  ttl     = 5
   records = [ var.domain_name ]
 }

@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "trust_policy" {
 }
 
 resource "aws_iam_role" "execution_role" {
-  name               = "${var.app_name}-${var.lambda_role_name}"
+  name               = "${var.app_name}-${var.lambda_role_name}-${var.environment}"
   assume_role_policy = data.aws_iam_policy_document.trust_policy.json
 }
 
