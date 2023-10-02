@@ -1,6 +1,6 @@
 # WEB BUCKET
 resource "aws_s3_bucket" "web_bucket" {
-  bucket        = "${var.app_name}-${var.web_bucket_name}-${var.environment}"
+  bucket        = var.web_bucket_name
   force_destroy = true
 }
 
@@ -68,7 +68,7 @@ resource "aws_s3_bucket_policy" "allow_cloudfront" {
 
 # CLOUDFRONT LOGS BUCKET
 resource "aws_s3_bucket" "logs_bucket" {
-  bucket        = "${var.app_name}-${var.logs_bucket_name}-${var.environment}"
+  bucket        = var.logs_bucket_name
   force_destroy = true
 }
 
@@ -147,7 +147,7 @@ resource "aws_s3_bucket_policy" "logs_bucket_policy" {
 
 # FILES BUCKET
 resource "aws_s3_bucket" "files_bucket" {
-  bucket        = "${var.app_name}-${var.files_bucket_name}-${var.environment}"
+  bucket        = var.files_bucket_name
   force_destroy = true
 }
 
