@@ -25,7 +25,7 @@ resource "aws_cloudfront_distribution" "dist" {
   price_class         = "PriceClass_100"
 
   default_cache_behavior {
-    allowed_methods        = ["value"]
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["PUT", "POST", "GET", "DELETE", "HEAD"]
     target_origin_id       = local.s3_origin_id
     viewer_protocol_policy = "redirect-to-https"
@@ -53,6 +53,7 @@ resource "aws_cloudfront_distribution" "dist" {
 
   viewer_certificate {
     acm_certificate_arn = var.acm_certificate_arn
+    ssl_support_method = "sni-only"
   }
   
   tags = {
