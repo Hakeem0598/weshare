@@ -9,6 +9,7 @@ resource "aws_lambda_function" "create_share" {
     variables = {
       BUCKET_NAME = var.files_bucket_name
       BASE_URL = "https://${var.domain_name}"
+      ENVIRONMENT = var.environment
     }
   }
 
@@ -36,6 +37,7 @@ resource "aws_lambda_function" "download_file" {
     variables = {
       BUCKET_NAME = var.files_bucket_name
       BASE_URL = "https://${var.domain_name}"
+      ENVIRONMENT = var.environment
     }
   }
 
