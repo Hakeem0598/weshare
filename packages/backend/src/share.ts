@@ -4,6 +4,8 @@ import { s3CreateSignedPutObjectUrl } from './aws/s3';
 import { BASE_URL, BUCKET_NAME, DEFAULT_EXPIRY } from './types';
 import { createKey } from './utils';
 
+const MIME_TYPE = 'application/octect-stream';
+
 export const handler: Handler<
 	APIGatewayEvent,
 	APIGatewayProxyResultV2
@@ -20,7 +22,7 @@ export const handler: Handler<
 		const contentDisposition =
 			filename && `content-disposition: attachment; filename="${filename}"`;
 
-		const signableHeaders = new Set<string>();
+		const signableHeaders = new Set([`content-type: ${MIME_TYPE}`]);
 		if (contentDisposition) signableHeaders.add(contentDisposition);
 
 		// Create an upload URL
@@ -39,7 +41,7 @@ export const handler: Handler<
 		return {
 			statusCode: 201,
 			body: `
-				Upload with: curl -X PUT -T <filename> ${contentDisposition ? `-H ${contentDisposition}` : ''} ${uploadUrl}
+				Upload with: curl -X PUT -T ${filename || '<FILENAME>'} ${contentDisposition ? `-H '${contentDisposition}'` : ''} ${uploadUrl}
 
 				Download with: curl ${downloadUrl}
 			`,
