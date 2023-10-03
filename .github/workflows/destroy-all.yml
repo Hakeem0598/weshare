@@ -15,6 +15,7 @@ jobs:
     secrets: inherit
 
   destroy-production:
+    needs: destroy-staging
     uses: ./.github/workflows/destroy.yml
     with:
       target-env: production
