@@ -2,6 +2,10 @@ output "files_bucket_invoke_arn" {
   value = aws_s3_bucket.files_bucket.bucket_regional_domain_name
 }
 
+output "files_bucket_arn" {
+  value = aws_s3_bucket.files_bucket.arn
+}
+
 output "logs_bucket_domain_name" {
   value = aws_s3_bucket.logs_bucket.bucket_domain_name
 }

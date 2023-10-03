@@ -1,27 +1,27 @@
 variable "web_bucket_name" {
-    type = string
+  type = string
 }
 
 variable "cloudfront_distribution_arn" {
-    type = string
+  type = string
 }
 
 variable "logs_bucket_name" {
-    type = string
+  type = string
 }
 
 variable "files_bucket_name" {
-    type = string
+  type = string
 }
 
 variable "lambda_arn" {
-    type = string
+  type = string
 }
 
 variable "environment" {
-    type = string   
+  type = string
 }
 
 variable "app_name" {
-    type = string
+  type = string
 }

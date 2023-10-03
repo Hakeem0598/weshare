@@ -21,13 +21,13 @@ resource "aws_route53_record" "web_subdomain" {
 }
 
 resource "aws_route53_record" "api_subdomain" {
-  name = local.api_subdomain
-  type = "A"
+  name    = local.api_subdomain
+  type    = "A"
   zone_id = data.aws_route53_zone.primary.zone_id
 
   alias {
-    name = var.apigateway_domain_name
-    zone_id = var.apigateway_hosted_zone_id
+    name                   = var.apigateway_domain_name
+    zone_id                = var.apigateway_hosted_zone_id
     evaluate_target_health = true
   }
 }
@@ -35,9 +35,9 @@ resource "aws_route53_record" "api_subdomain" {
 resource "aws_route53_record" "a_name_record" {
   count = var.environment == "production" ? 1 : 0
 
-  name = "www"
-  type = "CNAME"
+  name    = "www"
+  type    = "CNAME"
   zone_id = data.aws_route53_zone.primary.zone_id
   ttl     = 5
-  records = [ var.domain_name ]
+  records = [var.domain_name]
 }

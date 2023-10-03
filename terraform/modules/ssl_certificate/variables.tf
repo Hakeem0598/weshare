@@ -1,7 +1,7 @@
 variable "domain_name" {
-    type = string
+  type = string
 }
 
 variable "app_name" {
-    type = string
+  type = string
 }

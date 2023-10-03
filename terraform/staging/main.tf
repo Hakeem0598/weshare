@@ -51,25 +51,6 @@ module "dns" {
   apigateway_hosted_zone_id              = module.api.apigateway_hosted_zone_id
 }
 
-# module "ssl_certificate" {
-#   source                = "../modules/ssl_certificate"
-#   domain_name           = var.domain_name
-#   route53_cname_records = module.dns.route53_cname_records
-#   environment           = local.environment
-#   app_name              = var.app_name
-
-#   providers = {
-#     aws.us = aws.us
-#   }
-# }
-
-module "security" {
-  source           = "../modules/security"
-  lambda_role_name = "${var.app_name}-task-execution-role"
-  environment      = local.environment
-  app_name         = var.app_name
-}
-
 module "storage" {
   source                      = "../modules/storage"
   cloudfront_distribution_arn = module.cdn.cloudfront_distribution_arn
@@ -79,4 +60,13 @@ module "storage" {
   files_bucket_name           = local.files_bucket_name
   environment                 = local.environment
   app_name                    = var.app_name
+}
+
+module "security" {
+  source                 = "../modules/security"
+  lambda_role_name       = "${var.app_name}-task-execution-role"
+  environment            = local.environment
+  app_name               = var.app_name
+  share_files_lambda_arn = module.backend.lambda_arn
+  files_bucket_arn       = module.storage.files_bucket_arn
 }

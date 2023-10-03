@@ -53,9 +53,9 @@ resource "aws_cloudfront_distribution" "dist" {
 
   viewer_certificate {
     acm_certificate_arn = var.acm_certificate_arn
-    ssl_support_method = "sni-only"
+    ssl_support_method  = "sni-only"
   }
-  
+
   tags = {
     Name = "${var.app_name}-cloudfront-distribution-${var.environment}"
   }

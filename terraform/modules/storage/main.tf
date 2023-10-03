@@ -44,8 +44,8 @@ resource "aws_s3_bucket_cors_configuration" "web_bucket_cors_config" {
 
 data "aws_iam_policy_document" "cloudfront_policy" {
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:GetObject"
     ]
     resources = ["${aws_s3_bucket.web_bucket.arn}/*"]
@@ -187,46 +187,4 @@ resource "aws_s3_bucket_cors_configuration" "files_bucket_cors_config" {
     allowed_headers = ["*"]
     allowed_origins = ["*"]
   }
-}
-
-data "aws_iam_policy_document" "files_bucket_policy" {
-  statement {
-    effect    = "Allow"
-    actions   = [
-      "s3:PutObject",
-      "s3:GetObject"
-    ]
-    resources = ["${aws_s3_bucket.files_bucket.arn}/*"]
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-    condition {
-      test     = "StringEquals"
-      values   = [var.lambda_arn]
-      variable = "aws:SourceArn"
-    }
-  }
-
-  statement {
-    effect    = "Allow"
-    actions   = [
-      "s3:ListBucket",
-    ]
-    resources = [aws_s3_bucket.files_bucket.arn]
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-    condition {
-      test     = "StringEquals"
-      values   = [var.lambda_arn]
-      variable = "aws:SourceArn"
-    }
-  }
-}
-
-resource "aws_s3_bucket_policy" "allow_lambda" {
-  bucket = aws_s3_bucket.files_bucket.id
-  policy = data.aws_iam_policy_document.files_bucket_policy.json
 }
