@@ -27,8 +27,8 @@ resource "aws_apigatewayv2_route" "agw_route" {
 }
 
 resource "aws_apigatewayv2_stage" "primary_stage" {
-  api_id          = aws_apigatewayv2_api.agw.id
-  name            = var.environment
+  api_id      = aws_apigatewayv2_api.agw.id
+  name        = var.environment
   auto_deploy = true
 
   tags = {
@@ -42,10 +42,15 @@ locals {
 
 resource "aws_apigatewayv2_domain_name" "api" {
   domain_name = local.domain_name
-
   domain_name_configuration {
     certificate_arn = var.acm_certificate_arn
-    endpoint_type = "REGIONAL"
+    endpoint_type   = "REGIONAL"
     security_policy = "TLS_1_2"
   }
+}
+
+resource "aws_apigatewayv2_api_mapping" "api_mapping" {
+  api_id      = aws_apigatewayv2_api.agw.id
+  domain_name = aws_apigatewayv2_domain_name.api.id
+  stage       = var.environment
 }
