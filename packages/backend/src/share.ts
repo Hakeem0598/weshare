@@ -19,11 +19,11 @@ export const handler: Handler<
 		const downloadUrl = `${BASE_URL}/share/${id}`;
 
 		const filename = event.queryStringParameters?.filename;
-		const contentDisposition =
-			filename && `content-disposition: attachment; filename="${filename}"`;
+		const contentDisposition = filename && `attachment; filename="${filename}"`;
+		const contentDispositionHeader = contentDisposition && `content-disposition: ${contentDisposition}`;
 
 		const signableHeaders = new Set([`content-type: ${MIME_TYPE}`]);
-		if (contentDisposition) signableHeaders.add(contentDisposition);
+		if (contentDisposition) signableHeaders.add(contentDispositionHeader!);
 
 		// Create an upload URL
 		const uploadUrl = await s3CreateSignedPutObjectUrl({
@@ -41,7 +41,7 @@ export const handler: Handler<
 		return {
 			statusCode: 201,
 			body: `
-				Upload with: curl -X PUT -T ${filename || '<FILENAME>'} ${contentDisposition ? `-H '${contentDisposition}'` : ''} ${uploadUrl}
+				Upload with: curl -X PUT -T ${filename || '<FILENAME>'} ${contentDispositionHeader ? `-H '${contentDispositionHeader}'` : ''} ${uploadUrl}
 
 				Download with: curl ${downloadUrl}
 			`,
