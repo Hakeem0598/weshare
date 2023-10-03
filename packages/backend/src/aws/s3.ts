@@ -27,7 +27,7 @@ export const s3PutObject = async ({
 	const command = new PutObjectCommand(params);
 
 	try {
-		const url = getSignedUrl(s3Client, command, { expiresIn: expiry });
+		const url = await getSignedUrl(s3Client, command, { expiresIn: expiry });
 		return url;
 	} catch (error) {
 		throw new Error(`s3PutObject error: ${(error as Error).message}`);
