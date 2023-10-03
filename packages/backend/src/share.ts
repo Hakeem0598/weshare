@@ -7,7 +7,7 @@ import { createKey } from './utils';
 export const handler: Handler<
 	APIGatewayEvent,
 	APIGatewayProxyResultV2
-> = async () => {
+> = async (event) => {
 	try {
 		// Create key (file name)
 		const id = randomUUID();
@@ -16,19 +16,33 @@ export const handler: Handler<
 		// Create a download URL
 		const downloadUrl = `${BASE_URL}/share/${id}`;
 
+		const filename = event.queryStringParameters?.filename;
+		const contentDisposition =
+			filename && `content-disposition: attachment; filename="${filename}"`;
+
+		const signableHeaders = new Set<string>();
+		if (contentDisposition) signableHeaders.add(contentDisposition);
+
 		// Create an upload URL
 		const uploadUrl = await s3CreateSignedPutObjectUrl({
 			bucketName: BUCKET_NAME,
 			bucketKey: key,
 			expiry: DEFAULT_EXPIRY,
+			inputOptions: {
+				ContentDisposition: contentDisposition,
+			},
+			presignOptions: {
+				signableHeaders,
+			},
 		});
 
 		return {
 			statusCode: 201,
-			body: JSON.stringify({
-				uploadUrl,
-				downloadUrl,
-			}),
+			body: `
+				Upload with: curl -X PUT -T <filename> ${contentDisposition ? `-H ${contentDisposition}` : ''} ${uploadUrl}
+
+				Download with: curl ${downloadUrl}
+			`,
 			headers: {
 				'content-type': 'application/json',
 			},
