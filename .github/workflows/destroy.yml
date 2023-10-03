@@ -24,7 +24,7 @@ on:
         required: true
       AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME:
         required: true
-        
+
 permissions:
   id-token: write
   contents: read
@@ -35,6 +35,8 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       AWS_TFSTATE_BUCKET_KEY_NAME: "${{ inputs.target-env }}.${{ secrets.AWS_TFSTATE_BUCKET_KEY_NAME }}"
+      AWS_CREATE_SHARE_LAMBDA_REPO_NAME: "${{ inputs.target-env }}/${{ secrets.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }}"
+      AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME: "${{ inputs.target-env }}/${{ secrets.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}"
     steps:
       - name: "Git checkout"
         uses: actions/checkout@v3
@@ -45,6 +47,10 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
           role-session-name: ${{ secrets.AWS_OIDC_ROLE_SESSION_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Log into Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        id: login-ecr
 
       - name: Initialize Terraform
         id: init
@@ -64,6 +70,8 @@ jobs:
         env:
           TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
           TF_VAR_domain_name: ${{ secrets.DOMAIN_NAME }}
+          TF_VAR_create_share_image_uri: "${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }}:${{ github.sha }}"
           TF_VAR_create_share_lambda_name: "${{ secrets.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }}"
+          TF_VAR_download_file_image_uri: "${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}:${{ github.sha }}"
           TF_VAR_download_file_lambda_name: "${{ secrets.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}"
           TF_VAR_api_gateway_stage_name: "primary"
