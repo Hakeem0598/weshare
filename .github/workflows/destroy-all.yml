@@ -1,0 +1,21 @@
+name: "Destroy all workflows"
+
+on:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  destroy-staging:
+    uses: ./.github/workflows/destroy.yml
+    with:
+      target-env: staging
+    secrets: inherit
+
+  destroy-production:
+    uses: ./.github/workflows/destroy.yml
+    with:
+      target-env: production
+    secrets: inherit

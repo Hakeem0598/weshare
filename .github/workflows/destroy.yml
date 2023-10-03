@@ -1,0 +1,65 @@
+name: "Destroy build"
+
+on:
+  workflow_call:
+    inputs:
+      target-env:
+        required: true
+        type: string
+        description: "The name of the environment to deploy to"
+    secrets:
+      AWS_OIDC_ROLE_ARN:
+        required: true
+      AWS_OIDC_ROLE_SESSION_NAME:
+        required: true
+      AWS_REGION:
+        required: true
+      AWS_LAMBDA_REPO_NAME:
+        required: true
+      AWS_TFSTATE_BUCKET_NAME:
+        required: true
+      AWS_TFSTATE_BUCKET_KEY_NAME:
+        required: true
+      DOMAIN_NAME:
+        required: true
+        
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  destroy:
+    runs-on: ubuntu-20.04
+    env:
+      AWS_TFSTATE_BUCKET_KEY_NAME: "${{ inputs.target-env }}.${{ secrets.AWS_TFSTATE_BUCKET_KEY_NAME }}"
+    steps:
+      - name: "Git checkout"
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials from AWS account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          role-session-name: ${{ secrets.AWS_OIDC_ROLE_SESSION_NAME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Initialize Terraform
+        id: init
+        working-directory: ./terraform/${{ inputs.target-env }}
+        env:
+          AWS_BUCKET_NAME: ${{ secrets.AWS_TFSTATE_BUCKET_NAME }}
+          AWS_BUCKET_KEY_NAME: ${{ env.AWS_TFSTATE_BUCKET_KEY_NAME }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: >
+          terraform init -backend-config="bucket=${AWS_BUCKET_NAME}"
+          -backend-config="key=${AWS_BUCKET_KEY_NAME}"
+          -backend-config="region=${AWS_REGION}"
+
+      - name: Terraform destroy
+        working-directory: ./terraform
+        run: terraform destroy -auto-approve -input=false
+        env:
+          TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+          TF_VAR_domain_name: ${{ secrets.DOMAIN_NAME }}
+          TF_VAR_lambda_name: "${{ secrets.AWS_LAMBDA_REPO_NAME }}"
