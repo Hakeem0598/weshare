@@ -1,12 +1,22 @@
-variable "integration_method" {
+variable "create_share_integration_method" {
   type = string
 }
 
-variable "lambda_arn" {
+variable "create_share_route_path" {
+  type = string
+}
+variable "create_share_lambda_arn" {
   type = string
 }
 
-variable "route_path" {
+variable "download_file_integration_method" {
+  type = string
+}
+
+variable "download_file_route_path" {
+  type = string
+}
+variable "download_file_lambda_arn" {
   type = string
 }
 

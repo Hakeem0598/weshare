@@ -1,16 +1,16 @@
 import {
-	S3Client,
-	PutObjectCommand,
-	PutObjectCommandInput,
 	GetObjectCommand,
 	GetObjectCommandInput,
+	PutObjectCommand,
+	PutObjectCommandInput,
+	S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { AWSRegions } from '../types';
 
 const s3Client = new S3Client({ region: AWSRegions['eu-west-2'] });
 
-export const s3PutObject = async ({
+export const s3CreateSignedPutObjectUrl = async ({
 	bucketName,
 	bucketKey,
 	expiry = 3600,
@@ -34,7 +34,7 @@ export const s3PutObject = async ({
 	}
 };
 
-export const s3getPresignedUrl = async ({
+export const s3GetSignedGetObjectUrl = async ({
 	bucketName,
 	bucketKey,
 	expiry = 3600,

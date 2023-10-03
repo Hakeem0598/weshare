@@ -7,14 +7,22 @@ variable "aws_region" {
 }
 
 variable "api_gateway_stage_name" {
-  default = "primary"
-}
-
-variable "lambda_name" {
   type = string
 }
 
-variable "image_uri" {
+variable "create_share_lambda_name" {
+  type = string
+}
+
+variable "create_share_image_uri" {
+  type = string
+}
+
+variable "download_file_lambda_name" {
+  type = string
+}
+
+variable "download_file_image_uri" {
   type = string
 }
 

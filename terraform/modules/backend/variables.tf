@@ -1,8 +1,16 @@
-variable "lambda_name" {
+variable "create_share_lambda_name" {
   type = string
 }
 
-variable "image_uri" {
+variable "create_share_image_uri" {
+  type = string
+}
+
+variable "download_file_lambda_name" {
+  type = string
+}
+
+variable "download_file_image_uri" {
   type = string
 }
 
@@ -22,5 +30,9 @@ variable "environment" {
   type = string
 }
 variable "app_name" {
+  type = string
+}
+
+variable "domain_name" {
   type = string
 }

@@ -13,20 +13,33 @@ resource "aws_apigatewayv2_api" "agw" {
   }
 }
 
-resource "aws_apigatewayv2_integration" "lambda_integration" {
+resource "aws_apigatewayv2_integration" "create_share_lambda_integration" {
   api_id             = aws_apigatewayv2_api.agw.id
   integration_type   = "AWS_PROXY"
-  integration_method = var.integration_method
-  integration_uri    = var.lambda_arn
+  integration_method = var.create_share_integration_method
+  integration_uri    = var.create_share_lambda_arn
 }
 
-resource "aws_apigatewayv2_route" "agw_route" {
+resource "aws_apigatewayv2_route" "create_share_route" {
   api_id    = aws_apigatewayv2_api.agw.id
-  route_key = "${var.integration_method} ${var.route_path}"
-  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+  route_key = "${var.create_share_integration_method} ${var.create_share_route_path}"
+  target    = "integrations/${aws_apigatewayv2_integration.create_share_lambda_integration.id}"
 }
 
-resource "aws_apigatewayv2_stage" "primary_stage" {
+resource "aws_apigatewayv2_integration" "download_file_lambda_integration" {
+  api_id             = aws_apigatewayv2_api.agw.id
+  integration_type   = "AWS_PROXY"
+  integration_method = var.download_file_integration_method
+  integration_uri    = var.download_file_lambda_arn
+}
+
+resource "aws_apigatewayv2_route" "download_file_route" {
+  api_id    = aws_apigatewayv2_api.agw.id
+  route_key = "${var.download_file_integration_method} ${var.download_file_route_path}"
+  target    = "integrations/${aws_apigatewayv2_integration.download_file_lambda_integration.id}"
+}
+
+resource "aws_apigatewayv2_stage" "stage" {
   api_id      = aws_apigatewayv2_api.agw.id
   name        = var.environment
   auto_deploy = true

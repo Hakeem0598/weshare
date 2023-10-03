@@ -13,7 +13,3 @@ variable "app_name" {
 variable "files_bucket_arn" {
   type = string
 }
-
-variable "share_files_lambda_arn" {
-  type = string
-}
