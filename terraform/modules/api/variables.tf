@@ -21,7 +21,7 @@ variable "download_file_lambda_arn" {
 }
 
 variable "api_gateway_stage_name" {
-  type = string
+  default = "primary"
 }
 
 variable "environment" {
