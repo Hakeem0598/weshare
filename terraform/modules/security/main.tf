@@ -27,10 +27,6 @@ data "aws_iam_policy_document" "files_bucket_policy" {
       "s3:GetObject"
     ]
     resources = ["${var.files_bucket_arn}/*"]
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
     condition {
       test     = "StringEquals"
       values   = [var.share_files_lambda_arn]
@@ -44,10 +40,6 @@ data "aws_iam_policy_document" "files_bucket_policy" {
       "s3:ListBucket",
     ]
     resources = [var.files_bucket_arn]
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
     condition {
       test     = "StringEquals"
       values   = [var.share_files_lambda_arn]
