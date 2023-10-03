@@ -98,7 +98,7 @@ jobs:
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --target $TARGET ./packages/backend
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-      
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -185,6 +185,7 @@ jobs:
           TF_VAR_create_share_lambda_name: "${{ secrets.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }}"
           TF_VAR_download_file_image_uri: "${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}:${{ github.sha }}"
           TF_VAR_download_file_lambda_name: "${{ secrets.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}"
+          TF_VAR_api_gateway_stage_name: "primary"
         run: terraform apply -auto-approve
 
       - name: Download build artifacts
