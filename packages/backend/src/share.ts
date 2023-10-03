@@ -1,9 +1,7 @@
 import { Handler, APIGatewayEvent, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { randomUUID } from 'node:crypto';
 import { s3PutObject, s3getPresignedUrl } from './aws/s3';
-
-const EXPIRY = 24 * 60 * 60;
-const BUCKET_NAME = process.env.BUCKET_NAME!;
+import { BUCKET_NAME, DEFAULT_EXPIRY } from './types';
 
 export const handler: Handler<
 	APIGatewayEvent,
@@ -17,14 +15,14 @@ export const handler: Handler<
 	const downloadUrl = await s3getPresignedUrl({
 		bucketName: BUCKET_NAME,
 		bucketKey: key,
-		expiry: EXPIRY,
+		expiry: DEFAULT_EXPIRY,
 	});
 
 	// Create an upload URL
 	const uploadUrl = await s3PutObject({
 		bucketName: BUCKET_NAME,
 		bucketKey: key,
-		expiry: EXPIRY,
+		expiry: DEFAULT_EXPIRY,
 	});
 
 	return {

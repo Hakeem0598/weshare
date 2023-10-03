@@ -27,11 +27,6 @@ data "aws_iam_policy_document" "files_bucket_policy" {
       "s3:GetObject"
     ]
     resources = ["${var.files_bucket_arn}/*"]
-    # condition {
-    #   test     = "StringEquals"
-    #   values   = [var.share_files_lambda_arn]
-    #   variable = "aws:SourceArn"
-    # }
   }
 
   statement {
@@ -40,11 +35,6 @@ data "aws_iam_policy_document" "files_bucket_policy" {
       "s3:ListBucket",
     ]
     resources = [var.files_bucket_arn]
-    # condition {
-    #   test     = "StringEquals"
-    #   values   = [var.share_files_lambda_arn]
-    #   variable = "aws:SourceArn"
-    # }
   }
 }
 

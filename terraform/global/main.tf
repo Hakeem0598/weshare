@@ -3,6 +3,7 @@ data "aws_route53_zone" "primary" {
   private_zone = false
 }
 
+# FRONTEND
 resource "aws_acm_certificate" "us_cert" {
   provider = aws.us
 
@@ -39,7 +40,7 @@ resource "aws_acm_certificate_validation" "us_cert_validation" {
   validation_record_fqdns = [for record in aws_route53_record.us_cname_records : record.fqdn]
 }
 
-
+# BACKEND
 resource "aws_acm_certificate" "eu_cert" {
   domain_name               = var.domain_name
   validation_method         = "DNS"
