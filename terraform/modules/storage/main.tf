@@ -197,19 +197,14 @@ data "aws_iam_policy_document" "files_bucket_policy" {
       "s3:GetObject"
     ]
     resources = ["${aws_s3_bucket.files_bucket.arn}/*"]
-    # principals {
-    #   type        = "Service"
-    #   identifiers = ["lambda.amazonaws.com"]
-    # }
-    # condition {
-    #   test     = "StringEquals"
-    #   values   = [var.lambda_arn]
-    #   variable = "aws:SourceArn"
-    # }
-
     principals {
-      type = "*"
-      identifiers = [ "*" ]
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      values   = [var.lambda_arn]
+      variable = "aws:SourceArn"
     }
   }
 
