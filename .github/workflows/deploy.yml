@@ -79,8 +79,9 @@ jobs:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ env.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }}
           IMAGE_TAG: ${{ github.sha }}
+          TARGET: ${{ secrets.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }}
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --target $REPOSITORY ./packages/backend
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --target $TARGET ./packages/backend
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: Create Amazon ECR repository
@@ -93,8 +94,9 @@ jobs:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ env.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}
           IMAGE_TAG: ${{ github.sha }}
+          TARGET: ${{ secrets.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --target $REPOSITORY ./packages/backend
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --target $TARGET ./packages/backend
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
       
       - name: Setup Terraform
