@@ -1,3 +1,7 @@
+locals {
+  BASE_URL = var.environment == "production" ? "https://${var.domain_name}" : "https://api-${var.environment}.${var.domain_name}"
+}
+
 resource "aws_lambda_function" "create_share" {
   function_name = "${var.app_name}-${var.create_share_lambda_name}-${var.environment}"
   role          = var.execution_role_arn
@@ -8,8 +12,7 @@ resource "aws_lambda_function" "create_share" {
   environment {
     variables = {
       BUCKET_NAME = var.files_bucket_name
-      BASE_URL = "https://${var.domain_name}"
-      ENVIRONMENT = var.environment
+      BASE_URL    = local.BASE_URL
     }
   }
 
@@ -36,8 +39,7 @@ resource "aws_lambda_function" "download_file" {
   environment {
     variables = {
       BUCKET_NAME = var.files_bucket_name
-      BASE_URL = "https://${var.domain_name}"
-      ENVIRONMENT = var.environment
+      BASE_URL    = local.BASE_URL
     }
   }
 
