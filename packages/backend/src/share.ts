@@ -124,6 +124,6 @@ export const handler = middy(createShareHandler)
 			parseLanguages: false,
 			parseEncodings: false,
 			failOnMismatch: false,
-			availableMediaTypes: ['application/json', 'text/plain'],
+			availableMediaTypes: ['text/plain', 'application/json'],
 		})
 	);
