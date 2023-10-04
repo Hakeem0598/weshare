@@ -58,9 +58,3 @@ export const handler: Handler<
 		};
 	}
 };
-
-// UPLOAD
-// MAKE POST request to <uploadUrl> with a <file name>
-
-// DOWNLOAD
-// MAKE GET request to <downloadUrl>
