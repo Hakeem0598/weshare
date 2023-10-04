@@ -1,5 +1,7 @@
 locals {
-  BASE_URL = var.environment == "production" ? "https://${var.domain_name}" : "https://api-${var.environment}.${var.domain_name}"
+  BASE_URL                     = var.environment == "production" ? "https://${var.domain_name}" : "https://api-${var.environment}.${var.domain_name}"
+  POWERTOOLS_SERVICE_NAME      = "weshare"
+  POWERTOOLS_METRICS_NAMESPACE = "weshare"
 }
 
 resource "aws_lambda_function" "create_share" {
@@ -11,8 +13,10 @@ resource "aws_lambda_function" "create_share" {
 
   environment {
     variables = {
-      BUCKET_NAME = var.files_bucket_name
-      BASE_URL    = local.BASE_URL
+      BUCKET_NAME                  = var.files_bucket_name
+      BASE_URL                     = local.BASE_URL
+      POWERTOOLS_SERVICE_NAME      = local.POWERTOOLS_SERVICE_NAME
+      POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE
     }
   }
 
@@ -38,8 +42,10 @@ resource "aws_lambda_function" "download_file" {
 
   environment {
     variables = {
-      BUCKET_NAME = var.files_bucket_name
-      BASE_URL    = local.BASE_URL
+      BUCKET_NAME                  = var.files_bucket_name
+      BASE_URL                     = local.BASE_URL
+      POWERTOOLS_SERVICE_NAME      = local.POWERTOOLS_SERVICE_NAME
+      POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE
     }
   }
 
