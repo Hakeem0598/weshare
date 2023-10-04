@@ -74,9 +74,9 @@ const createShareHandler: Handler<
 			'content-type': 'text/plain',
 		};
 
-		logger.appendKeys({ preferredMediaType: event.preferredMediaType });
+		logger.appendKeys({ preferredMediaType: event.preferredMediaType === 'application/json' });
 
-		if (event.preferredMediaType && event.preferredMediaType === 'application/json') {
+		if (event.preferredMediaType === 'application/json') {
 			body = JSON.stringify({
 				filename,
 				downloadUrl,
