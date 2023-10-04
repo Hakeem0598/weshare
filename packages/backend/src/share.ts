@@ -1,4 +1,6 @@
 import { Logger, injectLambdaContext } from '@aws-lambda-powertools/logger';
+import httpContentNegotiation, { Event } from '@middy/http-content-negotiation';
+import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import {
 	MetricUnits,
 	Metrics,
@@ -19,7 +21,7 @@ const metrics = new Metrics();
 const MIME_TYPE = 'application/octect-stream';
 
 const createShareHandler: Handler<
-	APIGatewayEvent,
+	APIGatewayEvent & Event,
 	APIGatewayProxyResultV2
 > = async (event) => {
 	try {
@@ -60,24 +62,45 @@ const createShareHandler: Handler<
 			},
 		});
 
+		let body = `
+			Upload with: curl -X PUT -T ${filename || '<FILENAME>'} ${
+			contentDispositionHeader ? `-H '${contentDispositionHeader}'` : ''
+		} ${uploadUrl}
+
+			Download with: curl ${downloadUrl}
+		`;
+
+		let headers = {
+			'content-type': 'text/plain',
+		};
+
+		if (event.preferredMediaType === 'application/json') {
+			body = JSON.stringify({
+				filename,
+				downloadUrl,
+				uploadUrl,
+				headers: contentDispositionHeader,
+			});
+
+			headers = {
+				'content-type': 'application/json',
+			};
+		}
+
 		return {
 			statusCode: 201,
-			body: `
-				Upload with: curl -X PUT -T ${filename || '<FILENAME>'} ${
-				contentDispositionHeader ? `-H '${contentDispositionHeader}'` : ''
-			} ${uploadUrl}
-
-				Download with: curl ${downloadUrl}
-			`,
-			headers: {
-				'content-type': 'application/json',
-			},
+			headers,
+			body,
 		};
-	} catch (error) {
+	} catch (err) {
+		const error = err as Error;
+
+		logger.error(error.message, error);
+
 		return {
 			statusCode: 500,
 			body: JSON.stringify({
-				message: (error as Error).message,
+				message: error.message,
 			}),
 		};
 	}
@@ -86,4 +109,14 @@ const createShareHandler: Handler<
 export const handler = middy(createShareHandler)
 	.use(injectLambdaContext(logger, { logEvent: true }))
 	.use(logMetrics(metrics))
-	.use(captureLambdaHandler(tracer));
+	.use(captureLambdaHandler(tracer))
+	.use(httpHeaderNormalizer())
+	.use(
+		httpContentNegotiation({
+			parseCharsets: false,
+			parseLanguages: false,
+			parseEncodings: false,
+			failOnMismatch: false,
+			availableMediaTypes: ['application/json', 'text/plain'],
+		})
+	);
