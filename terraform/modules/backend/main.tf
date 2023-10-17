@@ -109,6 +109,7 @@ resource "aws_lambda_function" "oauth_callback" {
       POWERTOOLS_SERVICE_NAME      = local.POWERTOOLS_SERVICE_NAME_AUTH
       POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE_AUTH
       CLIENT_ID                    = local.CLIENT_ID
+      CLIENT_SECRET                = local.CLIENT_SECRET
       USER_POOL_DOMAIN             = local.USER_POOL_DOMAIN
     }
   }
