@@ -5,10 +5,10 @@ import {
 	logMetrics,
 } from '@aws-lambda-powertools/metrics';
 import { Tracer, captureLambdaHandler } from '@aws-lambda-powertools/tracer';
+import middy from '@middy/core';
 import { APIGatewayEvent, APIGatewayProxyResultV2, Handler } from 'aws-lambda';
 import { s3GetSignedGetObjectUrl } from './aws/s3';
-import { BUCKET_NAME, DEFAULT_EXPIRY } from './types';
-import middy from '@middy/core';
+import { BUCKET_NAME, DEFAULT_EXPIRY } from './config';
 import { createKey } from './utils';
 
 const tracer = new Tracer();

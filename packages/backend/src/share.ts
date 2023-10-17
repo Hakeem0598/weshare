@@ -1,6 +1,4 @@
 import { Logger, injectLambdaContext } from '@aws-lambda-powertools/logger';
-import httpContentNegotiation, { Event } from '@middy/http-content-negotiation';
-import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import {
 	MetricUnits,
 	Metrics,
@@ -8,10 +6,13 @@ import {
 } from '@aws-lambda-powertools/metrics';
 import { Tracer, captureLambdaHandler } from '@aws-lambda-powertools/tracer';
 import middy from '@middy/core';
+import httpContentNegotiation, { Event } from '@middy/http-content-negotiation';
+import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import { APIGatewayEvent, APIGatewayProxyResultV2, Handler } from 'aws-lambda';
 import { randomUUID } from 'node:crypto';
+import sanitizeFilename from 'sanitize-filename';
 import { s3CreateSignedPutObjectUrl } from './aws/s3';
-import { BASE_URL, BUCKET_NAME, DEFAULT_EXPIRY } from './types';
+import { BASE_URL, BUCKET_NAME, DEFAULT_EXPIRY } from './config';
 import { createKey } from './utils';
 
 const tracer = new Tracer();
@@ -30,7 +31,9 @@ const createShareHandler: Handler<
 		const key = createKey(id);
 
 		const filename = event.queryStringParameters?.filename;
-		const contentDisposition = filename && `attachment; filename="${filename}"`;
+		const sanitizedFilename = filename && sanitizeFilename(filename);
+		const contentDisposition =
+			sanitizedFilename && `attachment; filename="${sanitizedFilename}"`;
 		const contentDispositionHeader =
 			contentDisposition && `content-disposition: ${contentDisposition}`;
 
@@ -74,19 +77,14 @@ const createShareHandler: Handler<
 			'content-type': 'text/plain',
 		};
 
-		logger.appendKeys({
-			preferredMediaType: event.preferredMediaType === 'application/json' || false,
-		});
-
-		console.log({ preferredMediaType: event.preferredMediaType });
-		console.log(event);
-
 		if (event.preferredMediaType === 'application/json') {
 			body = JSON.stringify({
 				filename,
 				downloadUrl,
 				uploadUrl,
-				headers: contentDispositionHeader,
+				headers: {
+					'content-disposition': contentDisposition,
+				},
 			});
 
 			headers = {
