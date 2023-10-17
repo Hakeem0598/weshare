@@ -6,7 +6,6 @@ locals {
   POWERTOOLS_METRICS_NAMESPACE_AUTH    = "auth"
   CLIENT_ID                            = var.client_id
   CLIENT_SECRET                        = var.client_secret
-  AWS_REGION                           = var.aws_region
   USER_POOL_DOMAIN                     = var.user_pool_domain
 }
 
@@ -23,7 +22,6 @@ resource "aws_lambda_function" "create_share" {
       BASE_URL                     = local.BASE_URL
       POWERTOOLS_SERVICE_NAME      = local.POWERTOOLS_SERVICE_NAME_WESHARE
       POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE_WESHARE
-      AWS_REGION                   = var.aws_region
     }
   }
 
@@ -53,7 +51,6 @@ resource "aws_lambda_function" "download_file" {
       BASE_URL                     = local.BASE_URL
       POWERTOOLS_SERVICE_NAME      = local.POWERTOOLS_SERVICE_NAME_WESHARE
       POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE_WESHARE
-      AWS_REGION                   = var.aws_region
     }
   }
 
@@ -82,7 +79,6 @@ resource "aws_lambda_function" "auth_code" {
       BASE_URL                     = local.BASE_URL
       POWERTOOLS_SERVICE_NAME      = local.POWERTOOLS_SERVICE_NAME_AUTH
       POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE_AUTH
-      AWS_REGION                   = var.aws_region
       CLIENT_ID                    = local.CLIENT_ID
       USER_POOL_DOMAIN             = local.USER_POOL_DOMAIN
     }
@@ -112,7 +108,6 @@ resource "aws_lambda_function" "oauth_callback" {
       BASE_URL                     = local.BASE_URL
       POWERTOOLS_SERVICE_NAME      = local.POWERTOOLS_SERVICE_NAME_AUTH
       POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE_AUTH
-      AWS_REGION                   = var.aws_region
       CLIENT_ID                    = local.CLIENT_ID
       USER_POOL_DOMAIN             = local.USER_POOL_DOMAIN
     }
