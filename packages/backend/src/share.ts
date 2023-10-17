@@ -13,7 +13,7 @@ import { randomUUID } from 'node:crypto';
 import sanitizeFilename from 'sanitize-filename';
 import { s3CreateSignedPutObjectUrl } from './aws/s3';
 import { BASE_URL, BUCKET_NAME, DEFAULT_EXPIRY } from './config';
-import { createKey } from './utils';
+import { createKey } from './utils/createKey.js';
 
 const tracer = new Tracer();
 const logger = new Logger();

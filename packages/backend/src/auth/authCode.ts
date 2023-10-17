@@ -9,7 +9,7 @@ import {
 	CLIENT_ID,
 	COGNITO_OAUTH_AUTHORIZE_URI,
 	REDIRECT_URI,
-} from '../config';
+} from '../config.js';
 
 const tracer = new Tracer();
 const logger = new Logger();

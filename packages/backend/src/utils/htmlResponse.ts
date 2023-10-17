@@ -1,5 +1,5 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { ResponseHeader } from '../types/header';
+import { ResponseHeader } from '../types/header.js';
 
 export function htmlResponse(
 	statusCode: number,

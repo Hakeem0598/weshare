@@ -9,16 +9,16 @@ import middy from '@middy/core';
 import { APIGatewayEvent, APIGatewayProxyResultV2, Handler } from 'aws-lambda';
 import axios from 'axios';
 
+import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import {
 	CLIENT_ID,
 	CLIENT_SECRET,
 	COGNITO_OAUTH_TOKEN_URI,
 	REDIRECT_URI,
-} from '../config';
-import { htmlResponse } from '../utils/htmlResponse';
-import { jsonResponse } from '../utils/jsonResponse';
-import { parseCookies } from '../utils/parseCookies';
-import httpHeaderNormalizer from '@middy/http-header-normalizer';
+} from '../config.js';
+import { htmlResponse } from '../utils/htmlResponse.js';
+import { jsonResponse } from '../utils/jsonResponse.js';
+import { parseCookies } from '../utils/parseCookies.js';
 
 const tracer = new Tracer();
 const logger = new Logger();

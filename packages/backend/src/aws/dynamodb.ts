@@ -6,8 +6,7 @@ import {
 	PutItemCommandInput,
 } from '@aws-sdk/client-dynamodb';
 import { marshall } from '@aws-sdk/util-dynamodb';
-
-import { AWS_REGION } from '../config';
+import { AWS_REGION } from '../config.js';
 
 const client = new DynamoDBClient({ region: AWS_REGION });
 
