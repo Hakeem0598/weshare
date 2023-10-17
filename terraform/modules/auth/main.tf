@@ -55,7 +55,11 @@ resource "aws_cognito_user_pool_client" "upc" {
 }
 
 
+locals {
+  formatted_domain_name = replace(var.domain_name, ".", "-")
+}
+
 resource "aws_cognito_user_pool_domain" "upd" {
-  domain       = "${var.domain_name}-auth-${var.environment}"
+  domain       = "${local.formatted_domain_name}-auth-${var.environment}"
   user_pool_id = aws_cognito_user_pool.user_pool.id
 }
