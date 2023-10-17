@@ -51,7 +51,7 @@ resource "aws_cognito_user_pool_client" "upc" {
   callback_urls                        = [local.callback_url]
   default_redirect_uri                 = local.callback_url
   explicit_auth_flows                  = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH"]
-  write_attributes                     = ["emailØ"]
+  write_attributes                     = ["email"]
 }
 
 
