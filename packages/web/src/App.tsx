@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Button from './components/Button/Button';
+import CallToAction from './components/CallToAction/CallToAction';
+import Friends from './components/Friends/Friends';
+import { Header } from './components/Header/Header';
+import Sidebar from './components/Sidebar/Sidebar';
+import UploadContainer from './components/UploadContainer/UploadContainer';
 
 function App() {
-  const [count, setCount] = useState(0)
+	return (
+		<div className='p-[--app-padding] h-full relative'>
+			<Header />
+			<main className='h-[calc(100%-4rem)] flex flex-col'>
+				<div className='mt-auto h-full flex items-center'>
+					<div className='flex gap-20 flex-1 items-center'>
+						<UploadContainer />
+						<CallToAction />
+					</div>
+				</div>
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+				<div className='flex items-center'>
+					<Friends />
+					<Button
+						className='-translate-x-10'
+						variant='secondary'
+						border='light-gray'
+						size='sm'
+					>
+						Invite A Friend
+					</Button>
+				</div>
+			</main>
+
+			<Sidebar />
+		</div>
+	);
 }
 
-export default App
+export default App;
+
+fetch('https://saturncloud.io/blog/how-to-retrieve-cognito-user-pool-client-id-with-terraform-a-comprehensive-guide/', {
+})
