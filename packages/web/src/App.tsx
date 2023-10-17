@@ -36,6 +36,3 @@ function App() {
 }
 
 export default App;
-
-fetch('https://saturncloud.io/blog/how-to-retrieve-cognito-user-pool-client-id-with-terraform-a-comprehensive-guide/', {
-})
