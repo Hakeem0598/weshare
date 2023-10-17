@@ -28,7 +28,8 @@ const authCodeHandler: Handler<
 	url.searchParams.append('state', state);
 	url.searchParams.append('scope', 'openid');
 
-	const domain = new URL(BASE_URL).host;
+	const paths = new URL(BASE_URL).host.split('.');
+	const domain = paths.slice(-2).join('.');
 
 	return {
 		statusCode: 302,
