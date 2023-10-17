@@ -43,9 +43,9 @@ module "backend" {
   download_file_image_uri    = var.download_file_image_uri
   download_file_lambda_name  = var.download_file_lambda_name
   auth_code_lambda_name      = var.auth_code_lambda_name
-  auth_code_uri              = var.auth_code_uri
+  auth_code_uri              = var.auth_code_image_uri
   oauth_callback_lambda_name = var.oauth_callback_lambda_name
-  oauth_callback_uri         = var.oauth_callback_uri
+  oauth_callback_uri         = var.oauth_callback_image_uri
   execution_role_arn         = module.security.execution_role_arn
   api_gateway_execution_arn  = module.api.api_gateway_execution_arn
   environment                = local.environment
