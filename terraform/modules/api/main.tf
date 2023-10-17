@@ -88,9 +88,8 @@ resource "aws_apigatewayv2_domain_name" "api" {
   }
 }
 
-# resource "aws_apigatewayv2_api_mapping" "share_api_mapping" {
-#   api_id          = aws_apigatewayv2_api.agw.id
-#   domain_name     = aws_apigatewayv2_domain_name.api.id
-#   stage           = var.environment
-#   api_mapping_key = "share"
-# }
+resource "aws_apigatewayv2_api_mapping" "share_api_mapping" {
+  api_id          = aws_apigatewayv2_api.agw.id
+  domain_name     = aws_apigatewayv2_domain_name.api.id
+  stage           = var.environment
+}
