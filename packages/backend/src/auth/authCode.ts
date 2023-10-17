@@ -29,13 +29,15 @@ const authCodeHandler: Handler<
 	url.searchParams.append('scope', 'openid');
 
 	const paths = new URL(BASE_URL).host.split('.');
-	const domain = paths.slice(-2).join('.');
+	const domainPaths = paths.slice(-2);
+	domainPaths.unshift('');
+	const domain = domainPaths.join('.');
 
 	return {
 		statusCode: 302,
 		headers: {
 			Location: url.toString(),
-			'Set-Cookie': `state=${state}; Domain=${domain} Secure; HttpOnly; SameSite=Lax; Path=/`,
+			'Set-Cookie': `state=${state}; Domain=${domain}; Secure; HttpOnly; SameSite=Lax; Path=/`,
 		},
 	};
 };
