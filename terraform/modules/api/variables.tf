@@ -20,6 +20,28 @@ variable "download_file_lambda_arn" {
   type = string
 }
 
+variable "auth_code_integration_method" {
+  type = string
+}
+
+variable "auth_code_route_path" {
+  type = string
+}
+variable "auth_code_lambda_arn" {
+  type = string
+}
+
+variable "oauth_callback_integration_method" {
+  type = string
+}
+
+variable "oauth_callback_route_path" {
+  type = string
+}
+variable "oauth_callback_lambda_arn" {
+  type = string
+}
+
 variable "api_gateway_stage_name" {
   type = string
 }

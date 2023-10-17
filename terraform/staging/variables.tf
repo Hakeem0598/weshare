@@ -26,6 +26,22 @@ variable "download_file_image_uri" {
   type = string
 }
 
+variable "auth_code_lambda_name" {
+  type = string
+}
+
+variable "auth_code_uri" {
+  type = string
+}
+
+variable "oauth_callback_lambda_name" {
+  type = string
+}
+
+variable "oauth_callback_uri" {
+  type = string
+}
+
 variable "domain_name" {
   type = string
 }

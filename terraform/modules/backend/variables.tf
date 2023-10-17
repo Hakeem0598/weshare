@@ -36,3 +36,32 @@ variable "app_name" {
 variable "domain_name" {
   type = string
 }
+
+variable "aws_region" {
+  type = string
+}
+
+variable "client_id" {
+  type = string
+} 
+
+variable "client_secret" {
+  type = string
+} 
+
+variable "user_pool_domain" {
+  type = string
+}
+
+variable "auth_code_lambda_name" {
+  type = string
+}
+variable "auth_code_uri" {
+  type = string
+}
+variable "oauth_callback_lambda_name" {
+  type = string
+}
+variable "oauth_callback_uri" {
+  type = string
+}

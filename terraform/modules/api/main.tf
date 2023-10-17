@@ -39,6 +39,32 @@ resource "aws_apigatewayv2_route" "download_file_route" {
   target    = "integrations/${aws_apigatewayv2_integration.download_file_lambda_integration.id}"
 }
 
+resource "aws_apigatewayv2_integration" "auth_code_lambda_integration" {
+  api_id             = aws_apigatewayv2_api.agw.id
+  integration_type   = "AWS_PROXY"
+  integration_method = var.auth_code_integration_method
+  integration_uri    = var.auth_code_lambda_arn
+}
+
+resource "aws_apigatewayv2_route" "auth_code_route" {
+  api_id    = aws_apigatewayv2_api.agw.id
+  route_key = "${var.auth_code_integration_method} ${var.auth_code_route_path}"
+  target    = "integrations/${aws_apigatewayv2_integration.auth_code_lambda_integration.id}"
+}
+
+resource "aws_apigatewayv2_integration" "oauth_callback_lambda_integration" {
+  api_id             = aws_apigatewayv2_api.agw.id
+  integration_type   = "AWS_PROXY"
+  integration_method = var.oauth_callback_integration_method
+  integration_uri    = var.oauth_callback_lambda_arn
+}
+
+resource "aws_apigatewayv2_route" "oauth_callback_route" {
+  api_id    = aws_apigatewayv2_api.agw.id
+  route_key = "${var.oauth_callback_integration_method} ${var.oauth_callback_route_path}"
+  target    = "integrations/${aws_apigatewayv2_integration.oauth_callback_lambda_integration.id}"
+}
+
 resource "aws_apigatewayv2_stage" "stage" {
   api_id      = aws_apigatewayv2_api.agw.id
   name        = var.environment
@@ -62,9 +88,9 @@ resource "aws_apigatewayv2_domain_name" "api" {
   }
 }
 
-resource "aws_apigatewayv2_api_mapping" "api_mapping" {
-  api_id          = aws_apigatewayv2_api.agw.id
-  domain_name     = aws_apigatewayv2_domain_name.api.id
-  stage           = var.environment
-  api_mapping_key = "share"
-}
+# resource "aws_apigatewayv2_api_mapping" "share_api_mapping" {
+#   api_id          = aws_apigatewayv2_api.agw.id
+#   domain_name     = aws_apigatewayv2_domain_name.api.id
+#   stage           = var.environment
+#   api_mapping_key = "share"
+# }

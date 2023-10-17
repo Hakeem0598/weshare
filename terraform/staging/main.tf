@@ -8,32 +8,53 @@ data "aws_acm_certificate" "us_cert" {
 }
 
 module "api" {
-  source                           = "../modules/api"
-  create_share_route_path          = "/"
-  create_share_integration_method  = "POST"
-  create_share_lambda_arn          = module.backend.create_share_lambda_arn
-  download_file_route_path         = "/{id}"
-  download_file_integration_method = "GET"
-  download_file_lambda_arn         = module.backend.download_file_lambda_arn
-  api_gateway_stage_name           = var.api_gateway_stage_name
-  environment                      = local.environment
-  app_name                         = var.app_name
-  domain_name                      = var.domain_name
-  acm_certificate_arn              = data.aws_acm_certificate.eu_cert.arn
+  source                            = "../modules/api"
+  create_share_route_path           = "/share"
+  create_share_integration_method   = "POST"
+  create_share_lambda_arn           = module.backend.create_share_lambda_arn
+  download_file_route_path          = "/share/{id}"
+  download_file_integration_method  = "GET"
+  auth_code_route_path              = "/auth/verify"
+  auth_code_integration_method      = "GET"
+  auth_code_lambda_arn              = module.backend.auth_code_lambda_arn
+  oauth_callback_route_path         = "/auth/callback"
+  oauth_callback_integration_method = "GET"
+  oauth_callback_lambda_arn         = module.backend.oauth_callback_lambda_arn
+  download_file_lambda_arn          = module.backend.download_file_lambda_arn
+  api_gateway_stage_name            = var.api_gateway_stage_name
+  environment                       = local.environment
+  app_name                          = var.app_name
+  domain_name                       = var.domain_name
+  acm_certificate_arn               = data.aws_acm_certificate.eu_cert.arn
+}
+
+module "auth" {
+  source      = "../modules/auth"
+  app_name    = var.app_name
+  environment = local.environment
+  domain_name = var.domain_name
 }
 
 module "backend" {
-  source                    = "../modules/backend"
-  files_bucket_name         = local.files_bucket_name
-  create_share_image_uri    = var.create_share_image_uri
-  create_share_lambda_name  = var.create_share_lambda_name
-  download_file_image_uri   = var.download_file_image_uri
-  download_file_lambda_name = var.download_file_lambda_name
-  execution_role_arn        = module.security.execution_role_arn
-  api_gateway_execution_arn = module.api.api_gateway_execution_arn
-  environment               = local.environment
-  app_name                  = var.app_name
-  domain_name               = var.domain_name
+  source                     = "../modules/backend"
+  files_bucket_name          = local.files_bucket_name
+  create_share_image_uri     = var.create_share_image_uri
+  create_share_lambda_name   = var.create_share_lambda_name
+  download_file_image_uri    = var.download_file_image_uri
+  download_file_lambda_name  = var.download_file_lambda_name
+  auth_code_lambda_name      = var.auth_code_lambda_name
+  auth_code_uri              = var.auth_code_uri
+  oauth_callback_lambda_name = var.oauth_callback_lambda_name
+  oauth_callback_uri         = var.oauth_callback_uri
+  execution_role_arn         = module.security.execution_role_arn
+  api_gateway_execution_arn  = module.api.api_gateway_execution_arn
+  environment                = local.environment
+  app_name                   = var.app_name
+  domain_name                = var.domain_name
+  aws_region                 = var.aws_region
+  client_id                  = module.auth.client_id
+  client_secret              = module.auth.client_secret
+  user_pool_domain           = module.auth.user_pool_domain
 }
 
 module "cdn" {
