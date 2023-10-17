@@ -57,7 +57,7 @@ const Upload = ({ children }: UploadProps) => {
 			setIsUploading(true);
 
 			const createShareResp = await request<CreateUploadLinkResponse>(
-				`/share/?filename=${file.name}`,
+				`/share?filename=${file.name}`,
 				{
 					method: 'POST',
 					headers: {
