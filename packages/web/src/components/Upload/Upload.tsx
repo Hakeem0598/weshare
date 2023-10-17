@@ -4,13 +4,13 @@ import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { request } from '../../api';
 import { useStore } from '../../store/useStore';
+import { sleep } from '../../utils/sleep';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
 import LoaderWithProgress from '../LoaderWithProgress/LoaderWithProgress';
 import EllipsisIcon from '../icons/EllipsisIcon';
 import PlusIcon from '../icons/PlusIcon';
 import { CreateUploadLinkResponse, UploadProps } from './Upload.types';
-import { sleep } from '../../utils/sleep';
 
 const Upload = ({ children }: UploadProps) => {
 	const {
@@ -68,7 +68,7 @@ const Upload = ({ children }: UploadProps) => {
 
 			if (createShareResp.status !== 201) return;
 
-			const { uploadUrl, headers } = createShareResp.data;
+			const { uploadUrl, downloadUrl, headers } = createShareResp.data;
 
 			const uploadResp = await axios(uploadUrl, {
 				method: 'PUT',
@@ -83,7 +83,7 @@ const Upload = ({ children }: UploadProps) => {
 
 			if (uploadResp.status !== 200) return;
 
-			setDownloadUrl(uploadResp.data.downloadUrl);
+			setDownloadUrl(downloadUrl);
 			showSidebar(true);
 		} catch (error) {
 			console.log(error);
