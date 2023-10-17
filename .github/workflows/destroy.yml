@@ -24,6 +24,10 @@ on:
         required: true
       AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME:
         required: true
+      AWS_AUTH_CODE_LAMBDA_REPO_NAME:
+        required: true
+      AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME:
+        required: true
 
 permissions:
   id-token: write
@@ -37,6 +41,8 @@ jobs:
       AWS_TFSTATE_BUCKET_KEY_NAME: "${{ inputs.target-env }}.${{ secrets.AWS_TFSTATE_BUCKET_KEY_NAME }}"
       AWS_CREATE_SHARE_LAMBDA_REPO_NAME: "${{ inputs.target-env }}/${{ secrets.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }}"
       AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME: "${{ inputs.target-env }}/${{ secrets.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}"
+      AWS_AUTH_CODE_LAMBDA_REPO_NAME: "${{ inputs.target-env }}/${{ secrets.AWS_AUTH_CODE_LAMBDA_REPO_NAME }}"
+      AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME: "${{ inputs.target-env }}/${{ secrets.AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME }}"
     steps:
       - name: "Git checkout"
         uses: actions/checkout@v3
@@ -74,4 +80,8 @@ jobs:
           TF_VAR_create_share_lambda_name: "${{ secrets.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }}"
           TF_VAR_download_file_image_uri: "${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}:${{ github.sha }}"
           TF_VAR_download_file_lambda_name: "${{ secrets.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}"
+          TF_VAR_auth_code_image_uri: "${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_AUTH_CODE_LAMBDA_REPO_NAME }}:${{ github.sha }}"
+          TF_VAR_auth_code_lambda_name: "${{ secrets.AWS_AUTH_CODE_LAMBDA_REPO_NAME }}"
+          TF_VAR_oauth_callback_image_uri: "${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME }}:${{ github.sha }}"
+          TF_VAR_oauth_callback_lambda_name: "${{ secrets.AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME }}"
           TF_VAR_api_gateway_stage_name: "primary"
