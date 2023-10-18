@@ -87,17 +87,16 @@ const IDPCallbackHandler: Handler<
 
 		metrics.addMetric('TokenRequestCount', MetricUnits.Count, 1);
 
-		const { access_token, id_token, refresh_token } = res.data;
+		const { access_token, id_token, refresh_token, token_type } = res.data;
 
 		const payload = {
 			id_token,
 			access_token,
 			refresh_token,
+			token_type,
 		};
 
-		return jsonResponse(302, payload, {
-			Location: '/',
-		});
+		return jsonResponse(200, payload);
 	} catch (err) {
 		const error = err as Error;
 		logger.error({ error, message: error.message });
