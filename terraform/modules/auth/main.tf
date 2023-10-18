@@ -33,7 +33,7 @@ resource "aws_cognito_user_pool" "user_pool" {
 }
 
 locals {
-  callback_url = var.environment == "production" ? "https://api.${var.domain_name}/auth/callback" : "https://api-${var.environment}.${var.domain_name}/auth/callback"
+  callback_url = var.environment == "production" ? "https://${var.domain_name}/auth/callback" : "https://${var.environment}.${var.domain_name}/auth/callback"
 }
 
 resource "aws_cognito_user_pool_client" "upc" {

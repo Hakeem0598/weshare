@@ -1,5 +1,6 @@
 locals {
   BASE_URL                             = var.environment == "production" ? "https://api.${var.domain_name}" : "https://api-${var.environment}.${var.domain_name}"
+  CLIENT_URL                           = var.environment == "production" ? "https://${var.domain_name}" : "https://${var.environment}.${var.domain_name}"
   POWERTOOLS_SERVICE_NAME_WESHARE      = "weshare"
   POWERTOOLS_METRICS_NAMESPACE_WESHARE = "weshare"
   POWERTOOLS_SERVICE_NAME_AUTH         = "auth"
@@ -80,6 +81,7 @@ resource "aws_lambda_function" "auth_code" {
       POWERTOOLS_SERVICE_NAME      = local.POWERTOOLS_SERVICE_NAME_AUTH
       POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE_AUTH
       CLIENT_ID                    = local.CLIENT_ID
+      CLIENT_URL                   = local.CLIENT_URL
       USER_POOL_DOMAIN             = local.USER_POOL_DOMAIN
     }
   }
@@ -110,6 +112,7 @@ resource "aws_lambda_function" "oauth_callback" {
       POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE_AUTH
       CLIENT_ID                    = local.CLIENT_ID
       CLIENT_SECRET                = local.CLIENT_SECRET
+      CLIENT_URL                   = local.CLIENT_URL
       USER_POOL_DOMAIN             = local.USER_POOL_DOMAIN
     }
   }
