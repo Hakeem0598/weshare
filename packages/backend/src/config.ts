@@ -3,7 +3,9 @@ const USER_POOL_DOMAIN = process.env.USER_POOL_DOMAIN!;
 export const DEFAULT_EXPIRY = 24 * 60 * 60;
 
 export const BASE_URL = process.env.BASE_URL!;
-export const REDIRECT_URI = `${BASE_URL}/auth/callback`;
+
+export const CLIENT_URL = process.env.CLIENT_URL!;
+export const REDIRECT_URI = `${CLIENT_URL}/auth/callback`;
 
 export const CLIENT_ID = process.env.CLIENT_ID!;
 export const CLIENT_SECRET = process.env.CLIENT_SECRET!;
