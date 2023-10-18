@@ -71,18 +71,18 @@ const IDPCallbackHandler: Handler<
 	metrics.addMetric('SessionRetrievalCount', MetricUnits.Count, 1);
 
 	try {
-		const res = await axios(COGNITO_OAUTH_TOKEN_URI, {
-			method: 'POST',
+		const formData = new URLSearchParams();
+
+		formData.append('grant_type', 'authorization_code');
+		formData.append('client_id', CLIENT_ID);
+		formData.append('client_secret', CLIENT_SECRET);
+		formData.append('redirect_uri', REDIRECT_URI);
+		formData.append('code', code);
+
+		const res = await axios.post(COGNITO_OAUTH_TOKEN_URI, formData, {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			data: JSON.stringify({
-				grant_type: 'authorization_code',
-				client_id: CLIENT_ID,
-				client_secret: CLIENT_SECRET,
-				redirect_uri: REDIRECT_URI,
-				code,
-			}),
 		});
 
 		metrics.addMetric('TokenRequestCount', MetricUnits.Count, 1);
