@@ -9,3 +9,7 @@ output "client_secret" {
 output "user_pool_domain" {
   value = aws_cognito_user_pool_domain.upd.domain
 }
+
+output "user_pool_id" {
+  value = aws_cognito_user_pool.user_pool.id
+}
