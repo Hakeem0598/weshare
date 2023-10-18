@@ -23,6 +23,8 @@ function App() {
 
 			const res = await request(`/auth/callback${url.search}`);
 
+			console.log(res.data);
+
 			if (res.status !== 200) return;
 
 			const { access_token } = res.data;
@@ -31,7 +33,7 @@ function App() {
 				Authorization: `Bearer ${access_token}`,
 			};
 
-			window.location.replace(window.location.origin);
+			// window.location.replace(window.location.origin);
 		})();
 	}, []);
 
