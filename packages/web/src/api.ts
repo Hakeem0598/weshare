@@ -6,4 +6,6 @@ export const request = axios.create({
 	baseURL: API_URL,
 });
 
+request.defaults.withCredentials = true;
+
 // request.defaults.headers.common = { 'Authorization': `Bearer ${token}` }

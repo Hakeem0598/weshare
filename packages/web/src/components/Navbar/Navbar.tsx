@@ -11,7 +11,7 @@ const Navbar = () => {
 					<a href='/'>Features</a>
 				</li>
 				<li>
-					<Button target='_blank' href='https://api-staging.hakeem.bio/auth/verify' variant='primary' size='md'>
+					<Button href='https://api-staging.hakeem.bio/auth/verify' variant='primary' size='md'>
 						Join
 					</Button>
 				</li>
