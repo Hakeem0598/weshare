@@ -190,13 +190,3 @@ const Upload = ({ children }: UploadProps) => {
 };
 
 export default Upload;
-
-const url = new URLSearchParams(
-	'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=671128082532-jhphbq6d0e1gnsus9mn7vf8a6fjn10mp.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fapp.diagrams.net%2Fgoogle&response_type=code&include_granted_scopes=true&access_type=offline&prompt=consent%20select_account&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.file%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.install%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=cId%3D671128082532-jhphbq6d0e1gnsus9mn7vf8a6fjn10mp.apps.googleusercontent.com%26domain%3Dapp.diagrams.net%26token%3Di2ijvpncun71g9ugc98cbaodesqqfqffkniu81q8cpqkjoos69p&service=lso&o2v=2&theme=glif&flowName=GeneralOAuthFlow'
-);
-
-const params = [...url.entries()].reduce((acc, [key, value]) => {
-	return { ...acc, [key]: value };
-}, {});
-
-console.log(JSON.stringify(params, null, 4));
