@@ -11,8 +11,8 @@ import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import { APIGatewayEvent, APIGatewayProxyResultV2, Handler } from 'aws-lambda';
 import { randomUUID } from 'node:crypto';
 import sanitizeFilename from 'sanitize-filename';
-import { s3CreateSignedPutObjectUrl } from './aws/s3';
-import { BASE_URL, BUCKET_NAME, DEFAULT_EXPIRY } from './config';
+import { s3CreateSignedPutObjectUrl } from './aws/s3.js';
+import { BASE_URL, BUCKET_NAME, DEFAULT_EXPIRY } from './config.js';
 import { createKey } from './utils/createKey.js';
 
 const tracer = new Tracer();

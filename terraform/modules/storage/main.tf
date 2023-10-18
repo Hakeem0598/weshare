@@ -4,18 +4,6 @@ resource "aws_s3_bucket" "web_bucket" {
   force_destroy = true
 }
 
-resource "aws_s3_bucket_website_configuration" "web_config" {
-  bucket = aws_s3_bucket.web_bucket.id
-
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "index.html"
-  }
-}
-
 resource "aws_s3_bucket_public_access_block" "block_web_bucket_public_access" {
   bucket = aws_s3_bucket.web_bucket.id
 

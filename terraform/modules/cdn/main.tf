@@ -56,6 +56,13 @@ resource "aws_cloudfront_distribution" "dist" {
     ssl_support_method  = "sni-only"
   }
 
+  custom_error_response {
+    error_caching_min_ttl = 10
+    response_code = 403
+    error_code = 200
+    response_page_path = "/index.html"
+  }
+
   tags = {
     Name = "${var.app_name}-cloudfront-distribution-${var.environment}"
   }

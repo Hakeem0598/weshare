@@ -1,11 +1,16 @@
+locals {
+  origin = var.environment == "production" ? "https://${var.domain_name}" : "https://${var.environment}.${var.domain_name}"
+}
+
 resource "aws_apigatewayv2_api" "agw" {
   name          = "${var.app_name}-agw-${var.environment}"
   protocol_type = "HTTP"
 
   cors_configuration {
-    allow_origins = ["*"]
+    allow_origins = [local.origin]
     allow_methods = ["GET", "POST", "OPTIONS"]
     allow_headers = ["context-type"]
+    allow_credentials = true
   }
 
   tags = {
