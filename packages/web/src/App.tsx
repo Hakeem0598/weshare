@@ -33,7 +33,7 @@ function App() {
 				Authorization: `Bearer ${access_token}`,
 			};
 
-			window.location.replace(window.location.origin);
+			window.history.pushState({}, '', window.location.origin);
 		})();
 	}, []);
 
