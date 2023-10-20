@@ -46,7 +46,7 @@ function App() {
 
 		(async () => {
 			try {
-				const res = await request('/auth/user');
+				const res = await request('/auth/userInfo');
 				setUser(res.data);
 			} catch (error) {
 				console.log(error);
