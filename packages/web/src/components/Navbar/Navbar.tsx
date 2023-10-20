@@ -16,14 +16,18 @@ const Navbar = () => {
 				<li className='hover:underline'>
 					<a href='/'>Features</a>
 				</li>
-				<li>
+				<li className='w-[9.375rem]'>
 					{isLoading ? (
-						<Button size='md' className='shimmer bg-lighter-gray/50' disabled></Button>
+						<Button
+							className='shimmer bg-lighter-gray/50'
+							width='full'
+							disabled
+						></Button>
 					) : user ? (
 						<Button
 							href='https://api-staging.hakeem.bio/auth/verify'
 							variant='primary'
-							size='md'
+							width='full'
 						>
 							Sign out
 						</Button>
@@ -31,7 +35,7 @@ const Navbar = () => {
 						<Button
 							href='https://api-staging.hakeem.bio/auth/verify'
 							variant='primary'
-							size='md'
+							width='full'
 						>
 							Join
 						</Button>
