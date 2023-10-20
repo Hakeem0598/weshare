@@ -5,10 +5,10 @@ import middy from '@middy/core';
 import { APIGatewayEvent, APIGatewayProxyResultV2, Handler } from 'aws-lambda';
 import { cryptoRandomStringAsync } from 'crypto-random-string';
 import {
-	BASE_URL,
 	CLIENT_ID,
 	COGNITO_OAUTH_AUTHORIZE_URI,
-	REDIRECT_URI,
+	DOMAIN,
+	REDIRECT_URI
 } from '../config.js';
 
 const tracer = new Tracer();
@@ -28,16 +28,11 @@ const authCodeHandler: Handler<
 	url.searchParams.append('state', state);
 	url.searchParams.append('scope', 'openid');
 
-	const paths = new URL(BASE_URL).host.split('.');
-	const domainPaths = paths.slice(-2);
-	domainPaths.unshift('');
-	const domain = domainPaths.join('.');
-
 	return {
 		statusCode: 302,
 		headers: {
 			Location: url.toString(),
-			'Set-Cookie': `state=${state}; Domain=${domain}; Secure; HttpOnly; SameSite=Lax; Path=/`,
+			'Set-Cookie': `state=${state}; Domain=${DOMAIN}; Secure; HttpOnly; SameSite=Lax; Path=/`,
 		},
 	};
 };

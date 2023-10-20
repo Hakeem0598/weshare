@@ -4,11 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @font-face {
-	font-family: 'Aktiv Grotesk VF';
-	src: url('./fonts/AktivGroteskVF.ttf');
-} */
-
 @layer base {
 	:root {
 		--button-height: 3.5rem;
@@ -16,7 +11,7 @@
 		--dark-blue: rgb(var(--sky-950));
 		--max-card-width: 18.75rem;
 		--app-padding: 4rem;
-	}	
+	}
 
 	html,
 	body {
@@ -25,5 +20,32 @@
 
 	#root {
 		@apply h-full;
+	}
+}
+
+@layer utilities {
+	.shimmer {
+		overflow: hidden;
+		position: relative;
+	}
+
+	.shimmer::before {
+		content: '';
+		position: absolute;
+		inset: 0px;
+		transform: translateX(-100%);
+		animation: shimmer 1.5s infinite;
+		background: linear-gradient(
+			to right,
+			transparent,
+			#ffffff30,
+			transparent
+		);
+	}
+
+	@keyframes shimmer {
+		to {
+			transform: translateX(100%);
+		}
 	}
 }

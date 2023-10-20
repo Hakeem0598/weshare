@@ -1,12 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useStore } from '../../store/useStore';
+import { useFormStore } from '../../store/useFormStore';
 import Upload from '../Upload/Upload';
 import UploadComplete from '../UploadComplete/UploadComplete';
 import FileManagement from '../FileManagement/FileManagement';
 
 const UploadContainer = () => {
-	const file = useStore((state) => state.file);
-	const uploadComplete = useStore((state) => state.downloadUrl).length !== 0;
+	const file = useFormStore((state) => state.file);
+	const uploadComplete =
+		useFormStore((state) => state.downloadUrl).length !== 0;
 
 	return (
 		<AnimatePresence mode='popLayout'>

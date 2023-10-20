@@ -15,15 +15,15 @@ type Actions = {
 	reset(): void;
 };
 
-const initialState: State = {
+const INITIAL_STATE: State = {
 	file: null,
 	downloadUrl: '',
 	isUploading: false,
 	sidebarIsOpen: false,
 };
 
-export const useStore = create<State & Actions>((set) => ({
-	...initialState,
+export const useFormStore = create<State & Actions>((set) => ({
+	...INITIAL_STATE,
 	setFile(file) {
 		set(() => ({ file }));
 	},
@@ -37,6 +37,6 @@ export const useStore = create<State & Actions>((set) => ({
 		set(() => ({ sidebarIsOpen }));
 	},
 	reset() {
-		set(initialState);
+		set(INITIAL_STATE);
 	},
 }));

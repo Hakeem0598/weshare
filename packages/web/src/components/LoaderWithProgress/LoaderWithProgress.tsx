@@ -6,7 +6,7 @@ import {
 	useTransform,
 } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { useStore } from '../../store/useStore';
+import { useFormStore } from '../../store/useFormStore';
 import Loader from '../Loader/Loader';
 import CheckMarkIcon from '../icons/CheckMarkIcon';
 
@@ -15,7 +15,7 @@ const LoaderWithProgress = () => {
 	const rounded = useTransform(count, Math.round);
 	const [progress, setProgress] = useState(0);
 
-	const isUploading = useStore((state) => state.isUploading);
+	const isUploading = useFormStore((state) => state.isUploading);
 
 	useEffect(() => {
 		const MAX = 100;

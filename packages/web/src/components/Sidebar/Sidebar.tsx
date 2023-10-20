@@ -1,6 +1,6 @@
 import { cx } from 'class-variance-authority';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useStore } from '../../store/useStore';
+import { useFormStore } from '../../store/useFormStore';
 import { byteConverter } from '../../utils/byteConverter';
 import Button from '../Button/Button';
 import Navbar from '../Navbar/Navbar';
@@ -28,9 +28,9 @@ const ListItem = ({ children, border = false, green }: ListItemProps) => {
 };
 
 const Sidebar = () => {
-	const showSidebar = useStore((state) => state.showSidebar);
-	const sidebarIsOpen = useStore((state) => state.sidebarIsOpen);
-	const file = useStore((state) => state.file);
+	const showSidebar = useFormStore((state) => state.showSidebar);
+	const sidebarIsOpen = useFormStore((state) => state.sidebarIsOpen);
+	const file = useFormStore((state) => state.file);
 
 	return (
 		<AnimatePresence>

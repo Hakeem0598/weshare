@@ -6,9 +6,17 @@ import Friends from './components/Friends/Friends';
 import { Header } from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
 import UploadContainer from './components/UploadContainer/UploadContainer';
+import { useAuthStore } from './store/useAuthStore';
 import { parseQueryString } from './utils/parseQueryString';
 
 function App() {
+	const setUser = useAuthStore((state) => state.setUser);
+	const setAccessToken = useAuthStore((state) => state.setAccessToken);
+	const setIsLoading = useAuthStore((state) => state.setIsLoading);
+	const user = useAuthStore((state) => state.user);
+
+	console.log(user);
+
 	useEffect(() => {
 		(async () => {
 			const url = new URL(window.location.href);
@@ -23,19 +31,30 @@ function App() {
 
 			const res = await request(`/auth/callback${url.search}`);
 
-			console.log(res.data);
-
 			if (res.status !== 200) return;
 
 			const { access_token } = res.data;
 
-			request.defaults.headers.common = {
-				Authorization: `Bearer ${access_token}`,
-			};
+			setAccessToken(access_token);
 
 			window.history.pushState({}, '', window.location.origin);
 		})();
-	}, []);
+	}, [setAccessToken]);
+
+	useEffect(() => {
+		setIsLoading(true);
+
+		(async () => {
+			try {
+				const res = await request('/auth/user');
+				setUser(res.data);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setIsLoading(false);
+			}
+		})();
+	}, [setUser, setIsLoading]);
 
 	return (
 		<div className='p-[--app-padding] h-full relative'>

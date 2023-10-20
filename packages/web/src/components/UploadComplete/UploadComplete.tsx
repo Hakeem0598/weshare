@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useStore } from '../../store/useStore';
+import { useFormStore } from '../../store/useFormStore';
 import { copyText } from '../../utils/copyText';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
@@ -29,7 +29,12 @@ const CopyLink = ({ text }: { text: string }) => {
 				className='w-full mr-2 text-center text-sm'
 				onChange={() => {}}
 			/>
-			<Button onClick={handleClick} size='xs' variant='gray' className='min-w-[3rem] h-12'>
+			<Button
+				onClick={handleClick}
+				size='xs'
+				variant='gray'
+				className='min-w-[3rem] h-12'
+			>
 				<LinkIcon />
 			</Button>
 		</div>
@@ -37,8 +42,8 @@ const CopyLink = ({ text }: { text: string }) => {
 };
 
 const UploadComplete = () => {
-	const downloadUrl = useStore((state) => state.downloadUrl);
-	const reset = useStore((state) => state.reset);
+	const downloadUrl = useFormStore((state) => state.downloadUrl);
+	const reset = useFormStore((state) => state.reset);
 
 	return (
 		<Card>

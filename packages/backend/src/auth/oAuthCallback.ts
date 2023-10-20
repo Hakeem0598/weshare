@@ -14,6 +14,7 @@ import {
 	CLIENT_ID,
 	CLIENT_SECRET,
 	COGNITO_OAUTH_TOKEN_URI,
+	DOMAIN,
 	REDIRECT_URI,
 } from '../config.js';
 import { htmlResponse } from '../utils/htmlResponse.js';
@@ -47,7 +48,7 @@ const IDPCallbackHandler: Handler<
 
 	if (!cookieHeader) {
 		return jsonResponse(400, {
-			message: 'No cookie header found in request',
+			message: 'No cookie header sent in request',
 		});
 	}
 
@@ -57,9 +58,9 @@ const IDPCallbackHandler: Handler<
 
 	if (!stateCookie) {
 		return jsonResponse(400, {
-			message: 'No state cookie found in request',
+			message: 'No state cookie sent in request',
 		});
-	}
+	} 
 
 	// Check that state cookie matches the state query param
 	if (stateCookie !== state) {
@@ -87,18 +88,18 @@ const IDPCallbackHandler: Handler<
 
 		metrics.addMetric('TokenRequestCount', MetricUnits.Count, 1);
 
-		// const { access_token, id_token, refresh_token, token_type } = res.data;
+		const { access_token, id_token, refresh_token, token_type } = res.data;
 
-		// const payload = {
-		// 	id_token,
-		// 	access_token,
-		// 	refresh_token,
-		// 	token_type,
-		// };
+		const payload = {
+			id_token,
+			access_token,
+			refresh_token,
+			token_type,
+		};
 
-		logger.info(res.data);
-
-		return jsonResponse(200, res.data);
+		return jsonResponse(200, payload, {
+			'Set-Cookie': `access_token=${access_token}; Domain=${DOMAIN}; Secure; HttpOnly; SameSite=Lax; Path=/`,
+		});
 	} catch (err) {
 		const error = err as Error;
 		logger.error({ error, message: error.message });

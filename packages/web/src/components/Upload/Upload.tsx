@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { request } from '../../api';
-import { useStore } from '../../store/useStore';
+import { useFormStore } from '../../store/useFormStore';
 import { sleep } from '../../utils/sleep';
 import Button from '../Button/Button';
 import Card from '../Card/Card';
@@ -20,7 +20,7 @@ const Upload = ({ children }: UploadProps) => {
 		isUploading,
 		setIsUploading,
 		showSidebar,
-	} = useStore(
+	} = useFormStore(
 		useShallow(
 			({
 				file,

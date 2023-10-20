@@ -2,7 +2,7 @@ import { cx } from 'class-variance-authority';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CSSProperties, useRef } from 'react';
 import defaultColors from 'tailwindcss/colors';
-import { useStore } from '../../store/useStore';
+import { useFormStore } from '../../store/useFormStore';
 import { byteConverter } from '../../utils/byteConverter';
 import { getRandomColor } from '../../utils/randomColor';
 import LoaderWithProgress from '../LoaderWithProgress/LoaderWithProgress';
@@ -41,8 +41,8 @@ const FileItem = ({ name, size }: { name: string; size: string }) => {
 };
 
 const FileManagement = () => {
-	const file = useStore((state) => state.file);
-	const isUploading = useStore((state) => state.isUploading);
+	const file = useFormStore((state) => state.file);
+	const isUploading = useFormStore((state) => state.isUploading);
 
 	return (
 		<Upload>
