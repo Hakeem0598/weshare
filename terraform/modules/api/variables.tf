@@ -42,6 +42,17 @@ variable "oauth_callback_lambda_arn" {
   type = string
 }
 
+variable "user_info_integration_method" {
+  type = string
+}
+
+variable "user_info_route_path" {
+  type = string
+}
+variable "user_info_lambda_arn" {
+  type = string
+}
+
 variable "api_gateway_stage_name" {
   type = string
 }

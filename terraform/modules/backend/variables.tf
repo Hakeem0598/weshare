@@ -56,12 +56,19 @@ variable "user_pool_domain" {
 variable "auth_code_lambda_name" {
   type = string
 }
-variable "auth_code_uri" {
+variable "auth_code_image_uri" {
   type = string
 }
 variable "oauth_callback_lambda_name" {
   type = string
 }
-variable "oauth_callback_uri" {
+variable "oauth_callback_image_uri" {
+  type = string
+}
+
+variable "user_info_lambda_name" {
+  type = string
+}
+variable "user_info_image_uri" {
   type = string
 }

@@ -70,6 +70,19 @@ resource "aws_apigatewayv2_route" "oauth_callback_route" {
   target    = "integrations/${aws_apigatewayv2_integration.oauth_callback_lambda_integration.id}"
 }
 
+resource "aws_apigatewayv2_integration" "user_info_lambda_integration" {
+  api_id             = aws_apigatewayv2_api.agw.id
+  integration_type   = "AWS_PROXY"
+  integration_method = var.user_info_integration_method
+  integration_uri    = var.user_info_lambda_arn
+}
+
+resource "aws_apigatewayv2_route" "user_info_route" {
+  api_id    = aws_apigatewayv2_api.agw.id
+  route_key = "${var.user_info_integration_method} ${var.user_info_route_path}"
+  target    = "integrations/${aws_apigatewayv2_integration.user_info_lambda_integration.id}"
+}
+
 resource "aws_apigatewayv2_stage" "stage" {
   api_id      = aws_apigatewayv2_api.agw.id
   name        = var.environment

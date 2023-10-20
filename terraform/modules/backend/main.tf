@@ -71,7 +71,7 @@ resource "aws_lambda_permission" "download_file_permission" {
 resource "aws_lambda_function" "auth_code" {
   function_name = "${var.app_name}-${var.auth_code_lambda_name}-${var.environment}"
   role          = var.execution_role_arn
-  image_uri     = var.auth_code_uri
+  image_uri     = var.auth_code_image_uri
   package_type  = "Image"
   timeout       = 30
 
@@ -101,7 +101,7 @@ resource "aws_lambda_permission" "auth_code_permission" {
 resource "aws_lambda_function" "oauth_callback" {
   function_name = "${var.app_name}-${var.oauth_callback_lambda_name}-${var.environment}"
   role          = var.execution_role_arn
-  image_uri     = var.oauth_callback_uri
+  image_uri     = var.oauth_callback_image_uri
   package_type  = "Image"
   timeout       = 30
 
@@ -123,6 +123,38 @@ resource "aws_lambda_function" "oauth_callback" {
 }
 
 resource "aws_lambda_permission" "oauth_callback_permission" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.oauth_callback.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${var.api_gateway_execution_arn}/*/*"
+}
+
+resource "aws_lambda_function" "user_info" {
+  function_name = "${var.app_name}-${var.user_info_lambda_name}-${var.environment}"
+  role          = var.execution_role_arn
+  image_uri     = var.user_info_image_uri
+  package_type  = "Image"
+  timeout       = 30
+
+  environment {
+    variables = {
+      BASE_URL                     = local.BASE_URL
+      POWERTOOLS_SERVICE_NAME      = local.POWERTOOLS_SERVICE_NAME_AUTH
+      POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE_AUTH
+      CLIENT_ID                    = local.CLIENT_ID
+      CLIENT_SECRET                = local.CLIENT_SECRET
+      CLIENT_URL                   = local.CLIENT_URL
+      USER_POOL_DOMAIN             = local.USER_POOL_DOMAIN
+    }
+  }
+
+  tags = {
+    Name = "${var.app_name}-${var.user_info_lambda_name}-${var.environment}"
+  }
+}
+
+resource "aws_lambda_permission" "user_info_permission" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.oauth_callback.function_name

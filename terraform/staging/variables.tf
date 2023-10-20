@@ -42,6 +42,14 @@ variable "oauth_callback_image_uri" {
   type = string
 }
 
+variable "user_info_lambda_name" {
+  type = string
+}
+
+variable "user_info_image_uri" {
+  type = string
+}
+
 variable "domain_name" {
   type = string
 }

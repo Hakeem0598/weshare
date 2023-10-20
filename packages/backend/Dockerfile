@@ -45,3 +45,15 @@ COPY . .
 RUN npm run build
 
 CMD [ "build/auth/oAuthCallback.handler" ]
+
+FROM public.ecr.aws/lambda/nodejs:16 AS user-info
+
+COPY package.*json . 
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+CMD [ "build/auth/userInfo.handler" ]

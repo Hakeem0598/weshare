@@ -14,20 +14,22 @@ module "api" {
   create_share_lambda_arn           = module.backend.create_share_lambda_arn
   download_file_route_path          = "/share/{id}"
   download_file_integration_method  = "GET"
+  download_file_lambda_arn          = module.backend.download_file_lambda_arn
   auth_code_route_path              = "/auth/verify"
   auth_code_integration_method      = "GET"
   auth_code_lambda_arn              = module.backend.auth_code_lambda_arn
   oauth_callback_route_path         = "/auth/callback"
   oauth_callback_integration_method = "GET"
   oauth_callback_lambda_arn         = module.backend.oauth_callback_lambda_arn
-  download_file_lambda_arn          = module.backend.download_file_lambda_arn
+  user_info_route_path              = "/auth/userInfo"
+  user_info_integration_method      = "GET"
+  user_info_lambda_arn              = module.backend.user_info_lambda_arn
   api_gateway_stage_name            = var.api_gateway_stage_name
   environment                       = local.environment
   app_name                          = var.app_name
   domain_name                       = var.domain_name
   acm_certificate_arn               = data.aws_acm_certificate.eu_cert.arn
 }
-
 
 module "auth" {
   source      = "../modules/auth"
@@ -44,9 +46,11 @@ module "backend" {
   download_file_image_uri    = var.download_file_image_uri
   download_file_lambda_name  = var.download_file_lambda_name
   auth_code_lambda_name      = var.auth_code_lambda_name
-  auth_code_uri              = var.auth_code_image_uri
+  auth_code_image_uri        = var.auth_code_image_uri
   oauth_callback_lambda_name = var.oauth_callback_lambda_name
-  oauth_callback_uri         = var.oauth_callback_image_uri
+  oauth_callback_image_uri   = var.oauth_callback_image_uri
+  user_info_lambda_name      = var.user_info_lambda_name
+  user_info_image_uri        = var.user_info_image_uri
   execution_role_arn         = module.security.execution_role_arn
   api_gateway_execution_arn  = module.api.api_gateway_execution_arn
   environment                = local.environment
