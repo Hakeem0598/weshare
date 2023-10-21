@@ -1,13 +1,13 @@
 locals {
   BASE_URL                             = var.environment == "production" ? "https://api.${var.domain_name}" : "https://api-${var.environment}.${var.domain_name}"
   CLIENT_URL                           = var.environment == "production" ? "https://${var.domain_name}" : "https://${var.environment}.${var.domain_name}"
+  CLIENT_ID                            = var.client_id
+  CLIENT_SECRET                        = var.client_secret
+  USER_POOL_DOMAIN                     = var.user_pool_domain
   POWERTOOLS_SERVICE_NAME_WESHARE      = "weshare"
   POWERTOOLS_METRICS_NAMESPACE_WESHARE = "weshare"
   POWERTOOLS_SERVICE_NAME_AUTH         = "auth"
   POWERTOOLS_METRICS_NAMESPACE_AUTH    = "auth"
-  CLIENT_ID                            = var.client_id
-  CLIENT_SECRET                        = var.client_secret
-  USER_POOL_DOMAIN                     = var.user_pool_domain
 }
 
 resource "aws_lambda_function" "create_share" {

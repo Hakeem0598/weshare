@@ -9,6 +9,7 @@ import axios from 'axios';
 import {
 	CLIENT_ID,
 	CLIENT_SECRET,
+	CLIENT_URL,
 	COGNITO_OAUTH_REVOKE_URI,
 	COOKIE_DOMAIN,
 } from '../config.js';
@@ -61,6 +62,7 @@ const signOutHandler: Handler<
 		return {
 			statusCode: 204,
 			headers: {
+                'Access-Control-Allow-Origin': CLIENT_URL,
 				'Set-Cookie': `access_token=; Secure; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${COOKIE_DOMAIN}`,
 			},
 		};
