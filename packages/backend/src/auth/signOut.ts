@@ -7,11 +7,10 @@ import { APIGatewayEvent, APIGatewayProxyResultV2, Handler } from 'aws-lambda';
 import axios from 'axios';
 
 import {
-	CLIENT_ID,
-	CLIENT_SECRET,
-	CLIENT_URL,
-	COGNITO_OAUTH_REVOKE_URI,
-	COOKIE_DOMAIN,
+    CLIENT_ID,
+    CLIENT_SECRET,
+    COGNITO_OAUTH_REVOKE_URI,
+    COOKIE_DOMAIN
 } from '../config.js';
 import { jsonResponse } from '../utils/jsonResponse.js';
 
@@ -62,7 +61,7 @@ const signOutHandler: Handler<
 		return {
 			statusCode: 204,
 			headers: {
-				'Access-Control-Allow-Origin': CLIENT_URL,
+				'Access-Control-Allow-Origin': '*',
 				'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 				'Access-Control-Allow-Headers': 'content-type, authorization',
 				'Access-Control-Allow-Credentials': true,
