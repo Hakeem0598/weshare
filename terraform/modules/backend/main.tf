@@ -154,6 +154,15 @@ resource "aws_lambda_function" "user_info" {
   }
 }
 
+resource "aws_lambda_permission" "user_info_permission" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.user_info.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${var.api_gateway_execution_arn}/*/*"
+}
+
+
 resource "aws_lambda_function" "sign_out" {
   function_name = "${var.app_name}-${var.sign_out_lambda_name}-${var.environment}"
   role          = var.execution_role_arn
