@@ -16,6 +16,10 @@ const Navbar = () => {
 		try {
 			const res = await request.post('/auth/signOut', {
 				refresh_token: refreshToken,
+			}, {
+				headers: {
+					'Content-Type': 'application/json'
+				}
 			});
 
 			if (res.status !== 204) return;
