@@ -1,11 +1,30 @@
+import { request } from '../../api';
 import { useAuthStore } from '../../store/useAuthStore';
 import Button from '../Button/Button';
-import { useShallow } from 'zustand/react/shallow';
 
 const Navbar = () => {
-	const { user, isLoading } = useAuthStore(
-		useShallow(({ user, isLoading }) => ({ user, isLoading }))
+	const { reset, isLoading, user, refreshToken } = useAuthStore(
+		({ user, isLoading, reset, refreshToken }) => ({
+			user,
+			refreshToken,
+			isLoading,
+			reset,
+		})
 	);
+
+	const signOut = async () => {
+		try {
+			const res = await request.post('/auth/signOut', {
+				refresh_token: refreshToken,
+			});
+
+			if (res.status !== 204) return;
+
+			reset();
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	return (
 		<nav>
@@ -24,11 +43,7 @@ const Navbar = () => {
 							disabled
 						></Button>
 					) : user ? (
-						<Button
-							href='https://api-staging.hakeem.bio/auth/verify'
-							variant='primary'
-							width='full'
-						>
+						<Button onClick={signOut} variant='primary' width='full'>
 							Sign out
 						</Button>
 					) : (

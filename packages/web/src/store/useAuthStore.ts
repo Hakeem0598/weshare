@@ -11,10 +11,12 @@ type State = {
 	user: User;
 	isLoading: boolean;
 	accessToken: string;
+	refreshToken: string;
 };
 
 type Actions = {
 	setAccessToken(token: string): void;
+	setRefreshToken(token: string): void;
 	setUser(user: User): void;
 	setIsLoading(isLoading: boolean): void;
 	reset(): void;
@@ -22,6 +24,7 @@ type Actions = {
 
 const INITIAL_STATE: State = {
 	accessToken: '',
+	refreshToken: '',
 	isLoading: false,
 	user: null,
 };
@@ -30,6 +33,9 @@ export const useAuthStore = create<State & Actions>((set) => ({
 	...INITIAL_STATE,
 	setAccessToken(token) {
 		set(() => ({ accessToken: token }));
+	},
+	setRefreshToken(token) {
+		set(() => ({ refreshToken: token }));
 	},
 	setUser(user) {
 		set(() => ({ user }));

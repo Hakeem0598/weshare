@@ -10,12 +10,27 @@ import { useAuthStore } from './store/useAuthStore';
 import { parseQueryString } from './utils/parseQueryString';
 
 function App() {
-	const setUser = useAuthStore((state) => state.setUser);
-	const setAccessToken = useAuthStore((state) => state.setAccessToken);
-	const setIsLoading = useAuthStore((state) => state.setIsLoading);
-	const user = useAuthStore((state) => state.user);
-
-	console.log(user);
+	const {
+		setAccessToken,
+		setUser,
+		setRefreshToken,
+		accessToken,
+		setIsLoading,
+	} = useAuthStore(
+		({
+			setAccessToken,
+			setUser,
+			setRefreshToken,
+			accessToken,
+			setIsLoading,
+		}) => ({
+			setAccessToken,
+			setUser,
+			setRefreshToken,
+			accessToken,
+			setIsLoading,
+		})
+	);
 
 	useEffect(() => {
 		(async () => {
@@ -33,13 +48,14 @@ function App() {
 
 			if (res.status !== 200) return;
 
-			const { access_token } = res.data;
+			const { access_token, refresh_token } = res.data;
 
 			setAccessToken(access_token);
+			setRefreshToken(refresh_token);
 
 			window.history.pushState({}, '', window.location.origin);
 		})();
-	}, [setAccessToken]);
+	}, [setAccessToken, setRefreshToken]);
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -54,7 +70,7 @@ function App() {
 				setIsLoading(false);
 			}
 		})();
-	}, [setUser, setIsLoading]);
+	}, [setUser, setIsLoading, accessToken]);
 
 	return (
 		<div className='p-[--app-padding] h-full relative'>
