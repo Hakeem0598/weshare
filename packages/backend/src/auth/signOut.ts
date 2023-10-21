@@ -59,7 +59,7 @@ const signOutHandler: Handler<
 		}
 
 		return {
-			statusCode: 200,
+			statusCode: 204,
 			headers: {
 				'Set-Cookie': `access_token=; Secure; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${COOKIE_DOMAIN}`,
 			},
