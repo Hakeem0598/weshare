@@ -1,0 +1,30 @@
+name: 'ECR Repo + Lambda Image Creation'
+description: 'Creates ECR repo and pushes Docker image for lambda function'
+inputs:
+  repository:
+    description: The name of the repository
+    required: true
+  lambda-name:
+    description: The name of the lambda function.
+    required: true
+  registry:
+    description: The URI of the ECR Private or ECR Public registry.
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Create ${{ inputs.lambda-name }} Amazon ECR repository
+      uses: int128/create-ecr-repository-action@v1
+      with:
+        repository: ${{ inputs.repository }}
+
+    - name: Build, tag and push ${{ inputs.lambda-name }} lambda image to Amazon ECR
+      env:
+        REGISTRY: ${{ inputs.registry }}
+        REPOSITORY: ${{ inputs.repository }}
+        IMAGE_TAG: ${{ github.sha }}
+        TARGET: ${{ inputs.lambda-name }}
+      run: |
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --target $TARGET ./packages/backend
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+      shell: bash

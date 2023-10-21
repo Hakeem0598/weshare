@@ -22,7 +22,7 @@ const userInfoHandler: Handler<
 
 	if (!cookieHeader) {
 		return jsonResponse(400, {
-			message: 'Unauthorized',
+			message: 'No cookie header sent in request',
 		});
 	}
 
@@ -32,7 +32,7 @@ const userInfoHandler: Handler<
 
 	if (!access_token) {
 		return jsonResponse(400, {
-			message: 'Unauthorized',
+			message: 'No access token cookie sent in request',
 		});
 	}
 
