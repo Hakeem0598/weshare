@@ -18,7 +18,7 @@ const Navbar = () => {
 				refresh_token: refreshToken,
 			});
 
-			if (res.status !== 204) return;
+			if (res.status !== 200) return;
 
 			reset();
 		} catch (error) {

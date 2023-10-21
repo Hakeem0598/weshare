@@ -7,7 +7,7 @@ import { cryptoRandomStringAsync } from 'crypto-random-string';
 import {
 	CLIENT_ID,
 	COGNITO_OAUTH_AUTHORIZE_URI,
-	DOMAIN,
+	COOKIE_DOMAIN,
 	REDIRECT_URI
 } from '../config.js';
 
@@ -32,7 +32,7 @@ const authCodeHandler: Handler<
 		statusCode: 302,
 		headers: {
 			Location: url.toString(),
-			'Set-Cookie': `state=${state}; Domain=${DOMAIN}; Secure; HttpOnly; SameSite=Lax; Path=/`,
+			'Set-Cookie': `state=${state}; Domain=${COOKIE_DOMAIN}; Secure; HttpOnly; SameSite=Lax; Path=/`,
 		},
 	};
 };

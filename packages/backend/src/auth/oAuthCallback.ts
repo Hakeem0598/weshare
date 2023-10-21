@@ -14,7 +14,7 @@ import {
 	CLIENT_ID,
 	CLIENT_SECRET,
 	COGNITO_OAUTH_TOKEN_URI,
-	DOMAIN,
+	COOKIE_DOMAIN,
 	REDIRECT_URI,
 } from '../config.js';
 import { htmlResponse } from '../utils/htmlResponse.js';
@@ -98,7 +98,7 @@ const IDPCallbackHandler: Handler<
 		};
 
 		return jsonResponse(200, payload, {
-			'Set-Cookie': `access_token=${access_token}; Domain=${DOMAIN}; Secure; HttpOnly; SameSite=Lax; Path=/`,
+			'Set-Cookie': `access_token=${access_token}; Domain=${COOKIE_DOMAIN}; Secure; HttpOnly; SameSite=Lax; Path=/`,
 		});
 	} catch (err) {
 		const error = err as Error;

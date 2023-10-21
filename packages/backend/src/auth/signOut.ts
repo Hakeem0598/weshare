@@ -10,7 +10,7 @@ import {
 	CLIENT_ID,
 	CLIENT_SECRET,
 	COGNITO_OAUTH_REVOKE_URI,
-	DOMAIN,
+	COOKIE_DOMAIN,
 } from '../config.js';
 import { jsonResponse } from '../utils/jsonResponse.js';
 
@@ -59,9 +59,9 @@ const signOutHandler: Handler<
 		}
 
 		return {
-			statusCode: 204,
+			statusCode: 200,
 			headers: {
-				'Set-Cookie': `access_token=; Secure; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${DOMAIN}`,
+				'Set-Cookie': `access_token=; Secure; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${COOKIE_DOMAIN}`,
 			},
 		};
 	} catch (err) {

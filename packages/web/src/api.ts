@@ -12,6 +12,12 @@ request.defaults.withCredentials = true;
 
 request.interceptors.request.use((config) => {
 	const token = useAuthStore.getState().accessToken;
-	config.headers.Authorization = `Bearer ${token}`;
+
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`;
+	} else {
+		delete config.headers['Authorization'];
+	}
+
 	return config;
 });

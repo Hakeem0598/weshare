@@ -8,7 +8,7 @@ const paths = new URL(BASE_URL).host.split('.');
 const domainPaths = paths.slice(-2);
 domainPaths.unshift('');
 
-export const DOMAIN = domainPaths.join('.');
+export const COOKIE_DOMAIN = domainPaths.join('.');
 
 export const CLIENT_URL = process.env.CLIENT_URL!;
 export const REDIRECT_URI = `${CLIENT_URL}/auth/callback`;
