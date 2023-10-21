@@ -79,42 +79,42 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
         id: login-ecr
 
-      - name: Create Amazon ECR repository +  ${{ secrets.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }} push lambda image
+      - name: Create Amazon ECR repository + push lambda image
         uses: ./.github/actions/ecr-lambda
         with:
           repository: ${{ env.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }}
           lambda-name: ${{ secrets.AWS_CREATE_SHARE_LAMBDA_REPO_NAME }}
           registry: ${{ steps.login-ecr.outputs.registry }}
 
-      - name: Create Amazon ECR repository +  ${{ secrets.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }} push lambda image
+      - name: Create Amazon ECR repository + push lambda image
         uses: ./.github/actions/ecr-lambda
         with:
           repository: ${{ env.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}
           lambda-name: ${{ secrets.AWS_DOWNLOAD_FILE_LAMBDA_REPO_NAME }}
           registry: ${{ steps.login-ecr.outputs.registry }}
 
-      - name: Create Amazon ECR repository +  ${{ secrets.AWS_AUTH_CODE_LAMBDA_REPO_NAME }} push lambda image
+      - name: Create Amazon ECR repository + push lambda image
         uses: ./.github/actions/ecr-lambda
         with:
           repository: ${{ env.AWS_AUTH_CODE_LAMBDA_REPO_NAME }}
           lambda-name: ${{ secrets.AWS_AUTH_CODE_LAMBDA_REPO_NAME }}
           registry: ${{ steps.login-ecr.outputs.registry }}
 
-      - name: Create Amazon ECR repository +  ${{ secrets.AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME }} push lambda image
+      - name: Create Amazon ECR repository + push lambda image
         uses: ./.github/actions/ecr-lambda
         with:
           repository: ${{ env.AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME }}
           lambda-name: ${{ secrets.AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME }}
           registry: ${{ steps.login-ecr.outputs.registry }}
 
-      - name: Create Amazon ECR repository +  ${{ secrets.AWS_USER_INFO_LAMBDA_REPO_NAME }} push lambda image
+      - name: Create Amazon ECR repository + push lambda image
         uses: ./.github/actions/ecr-lambda
         with:
           repository: ${{ env.AWS_USER_INFO_LAMBDA_REPO_NAME }}
           lambda-name: ${{ secrets.AWS_USER_INFO_LAMBDA_REPO_NAME }}
           registry: ${{ steps.login-ecr.outputs.registry }}
 
-      - name: Create Amazon ECR repository +  ${{ secrets.AWS_SIGN_OUT_LAMBDA_REPO_NAME }} push lambda image
+      - name: Create Amazon ECR repository + push lambda image
         uses: ./.github/actions/ecr-lambda
         with:
           repository: ${{ env.AWS_SIGN_OUT_LAMBDA_REPO_NAME }}
