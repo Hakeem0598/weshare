@@ -17,3 +17,7 @@ output "oauth_callback_lambda_arn" {
 output "user_info_lambda_arn" {
   value = aws_lambda_function.user_info.arn
 }
+
+output "sign_out_lambda_arn" {
+  value = aws_lambda_function.sign_out.arn
+}

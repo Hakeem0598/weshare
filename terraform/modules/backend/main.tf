@@ -154,10 +154,34 @@ resource "aws_lambda_function" "user_info" {
   }
 }
 
-resource "aws_lambda_permission" "user_info_permission" {
+resource "aws_lambda_function" "sign_out" {
+  function_name = "${var.app_name}-${var.sign_out_lambda_name}-${var.environment}"
+  role          = var.execution_role_arn
+  image_uri     = var.sign_out_image_uri
+  package_type  = "Image"
+  timeout       = 30
+
+  environment {
+    variables = {
+      BASE_URL                     = local.BASE_URL
+      POWERTOOLS_SERVICE_NAME      = local.POWERTOOLS_SERVICE_NAME_AUTH
+      POWERTOOLS_METRICS_NAMESPACE = local.POWERTOOLS_METRICS_NAMESPACE_AUTH
+      CLIENT_ID                    = local.CLIENT_ID
+      CLIENT_SECRET                = local.CLIENT_SECRET
+      CLIENT_URL                   = local.CLIENT_URL
+      USER_POOL_DOMAIN             = local.USER_POOL_DOMAIN
+    }
+  }
+
+  tags = {
+    Name = "${var.app_name}-${var.sign_out_lambda_name}-${var.environment}"
+  }
+}
+
+resource "aws_lambda_permission" "sign_out_permission" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.user_info.function_name
+  function_name = aws_lambda_function.sign_out.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${var.api_gateway_execution_arn}/*/*"
 }

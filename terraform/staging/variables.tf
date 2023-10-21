@@ -49,6 +49,13 @@ variable "user_info_lambda_name" {
 variable "user_info_image_uri" {
   type = string
 }
+variable "sign_out_lambda_name" {
+  type = string
+}
+
+variable "sign_out_image_uri" {
+  type = string
+}
 
 variable "domain_name" {
   type = string

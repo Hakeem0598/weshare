@@ -30,6 +30,8 @@ on:
         required: true
       AWS_USER_INFO_LAMBDA_REPO_NAME:
         required: true
+      AWS_SIGN_OUT_LAMBDA_REPO_NAME:
+        required: true
 
 permissions:
   id-token: write
@@ -46,6 +48,7 @@ jobs:
       AWS_AUTH_CODE_LAMBDA_REPO_NAME: "${{ inputs.target-env }}/${{ secrets.AWS_AUTH_CODE_LAMBDA_REPO_NAME }}"
       AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME: "${{ inputs.target-env }}/${{ secrets.AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME }}"
       AWS_USER_INFO_LAMBDA_REPO_NAME: "${{ inputs.target-env }}/${{ secrets.AWS_USER_INFO_LAMBDA_REPO_NAME }}"
+      AWS_SIGN_OUT_LAMBDA_REPO_NAME: "${{ inputs.target-env }}/${{ secrets.AWS_SIGN_OUT_LAMBDA_REPO_NAME }}"
     steps:
       - name: "Git checkout"
         uses: actions/checkout@v3
@@ -89,4 +92,6 @@ jobs:
           TF_VAR_oauth_callback_lambda_name: "${{ secrets.AWS_OAUTH_CALLBACK_LAMBDA_REPO_NAME }}"
           TF_VAR_user_info_image_uri: "${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_USER_INFO_LAMBDA_REPO_NAME }}:${{ github.sha }}"
           TF_VAR_user_info_lambda_name: "${{ secrets.AWS_USER_INFO_LAMBDA_REPO_NAME }}"
+          TF_VAR_sign_out_image_uri: "${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_SIGN_OUT_LAMBDA_REPO_NAME }}:${{ github.sha }}"
+          TF_VAR_sign_out_lambda_name: "${{ secrets.AWS_SIGN_OUT_LAMBDA_REPO_NAME }}"
           TF_VAR_api_gateway_stage_name: "primary"

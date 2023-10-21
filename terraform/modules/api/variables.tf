@@ -53,6 +53,17 @@ variable "user_info_lambda_arn" {
   type = string
 }
 
+variable "sign_out_integration_method" {
+  type = string
+}
+
+variable "sign_out_route_path" {
+  type = string
+}
+variable "sign_out_lambda_arn" {
+  type = string
+}
+
 variable "api_gateway_stage_name" {
   type = string
 }

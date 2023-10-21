@@ -83,6 +83,19 @@ resource "aws_apigatewayv2_route" "user_info_route" {
   target    = "integrations/${aws_apigatewayv2_integration.user_info_lambda_integration.id}"
 }
 
+resource "aws_apigatewayv2_integration" "sign_out_lambda_integration" {
+  api_id             = aws_apigatewayv2_api.agw.id
+  integration_type   = "AWS_PROXY"
+  integration_method = var.sign_out_integration_method
+  integration_uri    = var.sign_out_lambda_arn
+}
+
+resource "aws_apigatewayv2_route" "sign_out_route" {
+  api_id    = aws_apigatewayv2_api.agw.id
+  route_key = "${var.sign_out_integration_method} ${var.sign_out_route_path}"
+  target    = "integrations/${aws_apigatewayv2_integration.sign_out_lambda_integration.id}"
+}
+
 resource "aws_apigatewayv2_stage" "stage" {
   api_id      = aws_apigatewayv2_api.agw.id
   name        = var.environment

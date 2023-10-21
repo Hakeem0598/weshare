@@ -24,6 +24,9 @@ module "api" {
   user_info_route_path              = "/auth/userInfo"
   user_info_integration_method      = "GET"
   user_info_lambda_arn              = module.backend.user_info_lambda_arn
+  sign_out_route_path               = "/auth/signOut"
+  sign_out_integration_method       = "POST"
+  sign_out_lambda_arn               = module.backend.sign_out_lambda_arn
   api_gateway_stage_name            = var.api_gateway_stage_name
   environment                       = local.environment
   app_name                          = var.app_name
@@ -51,6 +54,8 @@ module "backend" {
   oauth_callback_image_uri   = var.oauth_callback_image_uri
   user_info_lambda_name      = var.user_info_lambda_name
   user_info_image_uri        = var.user_info_image_uri
+  sign_out_lambda_name       = var.sign_out_lambda_name
+  sign_out_image_uri         = var.sign_out_image_uri
   execution_role_arn         = module.security.execution_role_arn
   api_gateway_execution_arn  = module.api.api_gateway_execution_arn
   environment                = local.environment
