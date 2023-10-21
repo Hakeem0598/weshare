@@ -53,7 +53,7 @@ const signOutHandler: Handler<
 			},
 		});
 
-		if (res.status !== 204) {
+		if (res.status !== 200) {
 			logger.error(res.data);
 			return jsonResponse(res.status, res.data);
 		}
