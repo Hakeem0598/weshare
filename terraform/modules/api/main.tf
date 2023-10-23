@@ -9,7 +9,7 @@ resource "aws_apigatewayv2_api" "agw" {
   cors_configuration {
     allow_origins = [local.origin]
     allow_methods = ["GET", "POST", "OPTIONS"]
-    allow_headers = ["context-type", "authorization"]
+    allow_headers = ["content-type", "authorization"]
     allow_credentials = true
   }
 
