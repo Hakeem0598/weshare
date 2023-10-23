@@ -29,7 +29,6 @@ const signOutHandler: Handler<
 				'Access-Control-Allow-Origin': '*',
 				'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
 				'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-				'Access-Control-Allow-Credentials': true,
 				'Set-Cookie': `access_token=; Secure; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${COOKIE_DOMAIN}`,
 			},
 		};
@@ -77,7 +76,6 @@ const signOutHandler: Handler<
 				'Access-Control-Allow-Origin': '*',
 				'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
 				'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-				'Access-Control-Allow-Credentials': true,
 				'Set-Cookie': `access_token=; Secure; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${COOKIE_DOMAIN}`,
 			},
 		};
