@@ -22,18 +22,6 @@ const signOutHandler: Handler<
 	APIGatewayEvent,
 	APIGatewayProxyResultV2
 > = async (event) => {
-	if (event.httpMethod === 'OPTIONS') {
-		return {
-			statusCode: 204,
-			headers: {
-				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-				'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-				'Set-Cookie': `access_token=; Secure; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${COOKIE_DOMAIN}`,
-			},
-		};
-	}
-
 	if (!event.body) {
 		return jsonResponse(400, {
 			message: 'The request body is missing or invalid.',
@@ -73,9 +61,6 @@ const signOutHandler: Handler<
 		return {
 			statusCode: 204,
 			headers: {
-				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-				'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 				'Set-Cookie': `access_token=; Secure; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; Domain=${COOKIE_DOMAIN}`,
 			},
 		};
